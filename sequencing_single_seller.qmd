@@ -225,11 +225,7 @@ orders_per_seller_df.head()
 
 Before applying the sequencing models, the dataset is checked for missing values and data type consistency. In particular, timestamp variables must be converted to datetime format to ensure accurate computation of arrival times, due dates, waiting times, and tardiness.
 
-[4.3. Data Cleaning]{style="color:#990000;"}
-
-Before applying the sequencing models, the dataset is checked for missing values and data type consistency. In particular, timestamp variables must be converted to datetime format to ensure accurate computation of arrival times, due dates, waiting times, and tardiness.
-
-4.3.1 Check for Missing Values
+### [**4.3.1 Check for Missing Values**]{style="color:#990000;"}
 
 The following code checks for missing values in both datasets.
 
@@ -701,8 +697,13 @@ for seller_id, df in all_results.items():
     fig.show()
 ```
 
-# [**5. Interactive System**]{style="color:#990000;"}
+# [**5. Conculsion**]{style="color:#990000;"}
+
+This project successfully modeled e-commerce sellers as independent single-machine scheduling systems using the Brazilian Olist dataset. The findings confirm that the impact of sequencing rules is dictated by order volume. For sellers with low or well-spaced order volume, sequencing decisions are irrelevant as no queue forms; however, for high-volume sellers experiencing congestion, the choice of rule (FCFS, SPT, or EDD) has a significant effect on performance measures such as average waiting time and tardiness. Future work may extend this framework by incorporating more realistic processing time models, capacity constraints, or stochastic order arrivals.
+
+# [**6. Interactive System**]{style="color:#990000;"}
 
 This project includes an interactive Streamlit application where users can input a seller ID and compare FCFS, SPT, and EDD results.
 
 [Seller Order Sequencing Dashboard](https://scheduling-or.streamlit.app)
+
