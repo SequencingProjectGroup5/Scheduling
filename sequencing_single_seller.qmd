@@ -225,8 +225,6 @@ orders_per_seller_df.head()
 
 Before applying the sequencing models, the dataset is checked for missing values and data type consistency. In particular, timestamp variables must be converted to datetime format to ensure accurate computation of arrival times, due dates, waiting times, and tardiness.
 
-Great, this fits perfectly as Section 4.3 Data Cleaning. Below is a clean, concise, and well-structured 4.3 section, with clear explanations and correct Python code that you can paste directly into your Quarto document.
-
 [4.3. Data Cleaning]{style="color:#990000;"}
 
 Before applying the sequencing models, the dataset is checked for missing values and data type consistency. In particular, timestamp variables must be converted to datetime format to ensure accurate computation of arrival times, due dates, waiting times, and tardiness.
