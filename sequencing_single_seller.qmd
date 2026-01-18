@@ -705,10 +705,6 @@ for seller_id, df in all_results.items():
 
 # [**5. Interactive System**]{style="color:#990000;"}
 
-::: callout-important
-### Interactive Demo
-This project includes an interactive Streamlit application  
-where users can input a seller ID and compare FCFS, SPT, and EDD results.
+This project includes an interactive Streamlit application where users can input a seller ID and compare FCFS, SPT, and EDD results.
 
 [Seller Order Sequencing Dashboard](https://scheduling-or.streamlit.app)
-:::

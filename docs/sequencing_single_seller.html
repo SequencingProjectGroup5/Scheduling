@@ -1,0 +1,2131 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.8.26">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Chhouk Phalthunin, Hok Lyhour, Hun Sopheak">
+
+<title>Sequencing (Single Seller)</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js" integrity="sha384-ZvpUoO/+PpLXR1lu4jmpXWu80pZlYUAfxl5NsBMWOEPSjUn/6Z/hRTt8+pR6L4N2" crossorigin="anonymous"></script><script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<script src="site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="site_libs/quarto-html/axe/axe-check.js" type="module"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-587c61ba64f3a5504c4d52d930310e48.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap-5b4ad623e5705c0698d39aec6f10cf02.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<meta name="mermaid-theme" content="default">
+<script src="site_libs/quarto-diagram/mermaid.min.js"></script>
+<script src="site_libs/quarto-diagram/mermaid-init.js"></script>
+<link href="site_libs/quarto-diagram/mermaid.css" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/requirejs@2.3.6/require.min.js" integrity="sha384-c9c+LnTbwQ3aujuU7ULEPVvgLs+Fn6fJUvIGTsuu1ZcCf11fiEubah0ttpca4ntM sha384-6V1/AdqZRWk1KAlWbKBlGhN7VG4iE/yAZcO6NZPMF8od0vukrvr0tg4qY6NSrItx" crossorigin="anonymous"></script>
+
+<script type="application/javascript">define('jquery', [],function() {return window.jQuery;})</script>
+<script type="text/javascript">
+window.PlotlyConfig = {MathJaxConfig: 'local'};
+if (window.MathJax && window.MathJax.Hub && window.MathJax.Hub.Config) {window.MathJax.Hub.Config({SVG: {font: "STIX-Web"}});}
+if (typeof require !== 'undefined') {
+require.undef("plotly");
+requirejs.config({
+    paths: {
+        'plotly': ['https://cdn.plot.ly/plotly-2.35.2.min']
+    }
+});
+require(['plotly'], function(Plotly) {
+    window._Plotly = Plotly;
+});
+}
+</script>
+
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+<link rel="stylesheet" href="styles.css">
+</head>
+
+<body class="quarto-light">
+
+<div id="quarto-search-results"></div>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul class="collapse">
+  <li><a href="#introduction" id="toc-introduction" class="nav-link active" data-scroll-target="#introduction"><span style="color:#990000;">1. <strong>Introduction</strong></span></a></li>
+  <li><a href="#objective" id="toc-objective" class="nav-link" data-scroll-target="#objective"><span style="color:#990000;"><strong>2. Objective</strong></span></a></li>
+  <li><a href="#road-map" id="toc-road-map" class="nav-link" data-scroll-target="#road-map"><span style="color:#990000;"><strong>3. Road Map</strong></span></a></li>
+  <li><a href="#methodolgy" id="toc-methodolgy" class="nav-link" data-scroll-target="#methodolgy"><span style="color:#990000;"><strong>4. Methodolgy</strong></span></a>
+  <ul class="collapse">
+  <li><a href="#data-cleaning-and-data-preprocessing" id="toc-data-cleaning-and-data-preprocessing" class="nav-link" data-scroll-target="#data-cleaning-and-data-preprocessing"><span style="color:#990000;"><strong>4.1 Data Cleaning and Data Preprocessing</strong></span></a></li>
+  <li><a href="#seller-separation" id="toc-seller-separation" class="nav-link" data-scroll-target="#seller-separation"><span style="color:#990000;"><strong>4.2. Seller Separation</strong></span></a></li>
+  <li><a href="#data-cleaning" id="toc-data-cleaning" class="nav-link" data-scroll-target="#data-cleaning"><span style="color:#990000;"><strong>4.3. Data Cleaning</strong></span></a></li>
+  <li><a href="#sequencing-model-formulation" id="toc-sequencing-model-formulation" class="nav-link" data-scroll-target="#sequencing-model-formulation"><span style="color:#990000;"><strong>4.4. Sequencing Model Formulation</strong></span></a></li>
+  <li><a href="#first-come-first-served-fcfs" id="toc-first-come-first-served-fcfs" class="nav-link" data-scroll-target="#first-come-first-served-fcfs"><span style="color:#990000;"><strong>4.5 First Come First Served (FCFS)</strong></span></a></li>
+  <li><a href="#shortest-processing-time-spt" id="toc-shortest-processing-time-spt" class="nav-link" data-scroll-target="#shortest-processing-time-spt"><span style="color:#990000;"><strong>4.6 Shortest Processing Time (SPT)</strong></span></a></li>
+  <li><a href="#earliest-due-date-edd" id="toc-earliest-due-date-edd" class="nav-link" data-scroll-target="#earliest-due-date-edd"><span style="color:#990000;"><strong>4.7 Earliest Due Date (EDD)</strong></span></a></li>
+  <li><a href="#example-implementation-and-results" id="toc-example-implementation-and-results" class="nav-link" data-scroll-target="#example-implementation-and-results"><span style="color:#990000;"><strong>4.8 Example Implementation and Results</strong></span></a></li>
+  </ul></li>
+  <li><a href="#interactive-system" id="toc-interactive-system" class="nav-link" data-scroll-target="#interactive-system"><span style="color:#990000;"><strong>5. Interactive System</strong></span></a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Sequencing (Single Seller)</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Chhouk Phalthunin, Hok Lyhour, Hun Sopheak </p>
+          </div>
+  </div>
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<section id="introduction" class="level1">
+<h1><span style="color:#990000;">1. <strong>Introduction</strong></span></h1>
+<p>This project studies the sequencing of customer orders for a single seller in an e-commerce platform. We compare three classical single-machine scheduling rules, <strong>First Come First Served (FCFS), Shortest Processing Time (SPT), and Earliest Due Date (EDD), and evaluate their effects on waiting time and tardiness.</strong></p>
+<p>Using the <a href="https://www.kaggle.com/datasets/olistbr/brazilian-ecommerce">Brazilian E-Commerce (Olist) dataset</a>, we simulate order processing for each seller independently and develop an interactive system that allows sellers to input their seller ID and examine the resulting order sequences and performance metrics under each rule.</p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Note
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Mandatory Tables</p>
+<ul>
+<li>olist_orders_dataset</li>
+<li>olist_order_items_dataset</li>
+</ul>
+</div>
+</div>
+</section>
+<section id="objective" class="level1">
+<h1><span style="color:#990000;"><strong>2. Objective</strong></span></h1>
+<p>The main objectives of this project are to:</p>
+<ol type="1">
+<li><p>Model the order processing of a single seller as a single-machine scheduling problem.</p></li>
+<li><p>Apply and compare three classical sequencing rules: First Come First Served (FCFS), Shortest Processing Time (SPT), and Earliest Due Date (EDD).</p></li>
+<li><p>Evaluate the impact of each sequencing rule on key performance measures, including waiting time and tardiness.</p></li>
+<li><p>Use real transaction data from the Brazilian E-Commerce (Olist) dataset to simulate order processing under each rule.</p></li>
+<li><p>Develop an interactive scheduling system that allows sellers to input their seller ID and analyze order sequences and performance metrics.</p></li>
+</ol>
+</section>
+<section id="road-map" class="level1">
+<h1><span style="color:#990000;"><strong>3. Road Map</strong></span></h1>
+<div class="cell" data-layout-align="default">
+<div class="cell-output-display">
+<div>
+<p></p><figure class="figure"><p></p>
+<div>
+<pre class="mermaid mermaid-js">flowchart LR
+    A(**Data Preprocessing**&lt;br/&gt;Clean data&lt;br/&gt;Understand features) --&gt; B(**Seller Separation**&lt;br/&gt;Group orders by seller&lt;br/&gt;Treat each seller independently)
+    B --&gt; C(**Sequencing Models**&lt;br/&gt;FCFS&lt;br/&gt;SPT&lt;br/&gt;EDD) 
+    C --&gt; D(**Interactive System**&lt;br/&gt;Input seller ID&lt;br/&gt;View sequences &amp; metrics)
+</pre>
+</div>
+<p></p></figure><p></p>
+</div>
+</div>
+</div>
+</section>
+<section id="methodolgy" class="level1">
+<h1><span style="color:#990000;"><strong>4. Methodolgy</strong></span></h1>
+<section id="data-cleaning-and-data-preprocessing" class="level2">
+<h2 class="anchored" data-anchor-id="data-cleaning-and-data-preprocessing"><span style="color:#990000;"><strong>4.1 Data Cleaning and Data Preprocessing</strong></span></h2>
+<section id="import-important-libraries-and-load-data" class="level3">
+<h3 class="anchored" data-anchor-id="import-important-libraries-and-load-data">4.1.1. Import Important Libraries and Load Data</h3>
+<div id="1d6c4680" class="cell" data-execution_count="1">
+<details class="code-fold">
+<summary>Show code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> plotly.graph_objects <span class="im">as</span> go</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> plotly.subplots <span class="im">import</span> make_subplots </span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+</div>
+<div id="0297db52" class="cell" data-execution_count="2">
+<details class="code-fold">
+<summary>load order items data</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1"></a>order_items <span class="op">=</span> pd.read_csv(<span class="st">"olist_order_items_dataset.csv"</span>)</span>
+<span id="cb2-2"><a href="#cb2-2"></a>order_items.head()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-display" data-execution_count="28">
+<div>
+
+
+<table class="dataframe caption-top table table-sm table-striped small" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">order_id</th>
+<th data-quarto-table-cell-role="th">order_item_id</th>
+<th data-quarto-table-cell-role="th">product_id</th>
+<th data-quarto-table-cell-role="th">seller_id</th>
+<th data-quarto-table-cell-role="th">shipping_limit_date</th>
+<th data-quarto-table-cell-role="th">price</th>
+<th data-quarto-table-cell-role="th">freight_value</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">0</th>
+<td>00010242fe8c5a6d1ba2dd792cb16214</td>
+<td>1</td>
+<td>4244733e06e7ecb4970a6e2683c13e61</td>
+<td>48436dade18ac8b2bce089ec2a041202</td>
+<td>2017-09-19 09:45:35</td>
+<td>58.90</td>
+<td>13.29</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">1</th>
+<td>00018f77f2f0320c557190d7a144bdd3</td>
+<td>1</td>
+<td>e5f2d52b802189ee658865ca93d83a8f</td>
+<td>dd7ddc04e1b6c2c614352b383efe2d36</td>
+<td>2017-05-03 11:05:13</td>
+<td>239.90</td>
+<td>19.93</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">2</th>
+<td>000229ec398224ef6ca0657da4fc703e</td>
+<td>1</td>
+<td>c777355d18b72b67abbeef9df44fd0fd</td>
+<td>5b51032eddd242adc84c38acab88f23d</td>
+<td>2018-01-18 14:48:30</td>
+<td>199.00</td>
+<td>17.87</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">3</th>
+<td>00024acbcdf0a6daa1e931b038114c75</td>
+<td>1</td>
+<td>7634da152a4610f1595efa32f14722fc</td>
+<td>9d7a1d34a5052409006425275ba1c2b4</td>
+<td>2018-08-15 10:10:18</td>
+<td>12.99</td>
+<td>12.79</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">4</th>
+<td>00042b26cf59d7ce69dfabb4e55b4fd9</td>
+<td>1</td>
+<td>ac6c3623068f30de03045865e4e10089</td>
+<td>df560393f3a51e74553ab94004ba5c87</td>
+<td>2017-02-13 13:57:51</td>
+<td>199.90</td>
+<td>18.14</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+<div id="8ab74c83" class="cell" data-execution_count="3">
+<details class="code-fold">
+<summary>Show code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1"></a>orders <span class="op">=</span> pd.read_csv(<span class="st">"olist_orders_dataset.csv"</span>)</span>
+<span id="cb3-2"><a href="#cb3-2"></a>orders.head()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-display" data-execution_count="29">
+<div>
+
+
+<table class="dataframe caption-top table table-sm table-striped small" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">order_id</th>
+<th data-quarto-table-cell-role="th">customer_id</th>
+<th data-quarto-table-cell-role="th">order_status</th>
+<th data-quarto-table-cell-role="th">order_purchase_timestamp</th>
+<th data-quarto-table-cell-role="th">order_approved_at</th>
+<th data-quarto-table-cell-role="th">order_delivered_carrier_date</th>
+<th data-quarto-table-cell-role="th">order_delivered_customer_date</th>
+<th data-quarto-table-cell-role="th">order_estimated_delivery_date</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">0</th>
+<td>e481f51cbdc54678b7cc49136f2d6af7</td>
+<td>9ef432eb6251297304e76186b10a928d</td>
+<td>delivered</td>
+<td>2017-10-02 10:56:33</td>
+<td>2017-10-02 11:07:15</td>
+<td>2017-10-04 19:55:00</td>
+<td>2017-10-10 21:25:13</td>
+<td>2017-10-18 00:00:00</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">1</th>
+<td>53cdb2fc8bc7dce0b6741e2150273451</td>
+<td>b0830fb4747a6c6d20dea0b8c802d7ef</td>
+<td>delivered</td>
+<td>2018-07-24 20:41:37</td>
+<td>2018-07-26 03:24:27</td>
+<td>2018-07-26 14:31:00</td>
+<td>2018-08-07 15:27:45</td>
+<td>2018-08-13 00:00:00</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">2</th>
+<td>47770eb9100c2d0c44946d9cf07ec65d</td>
+<td>41ce2a54c0b03bf3443c3d931a367089</td>
+<td>delivered</td>
+<td>2018-08-08 08:38:49</td>
+<td>2018-08-08 08:55:23</td>
+<td>2018-08-08 13:50:00</td>
+<td>2018-08-17 18:06:29</td>
+<td>2018-09-04 00:00:00</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">3</th>
+<td>949d5b44dbf5de918fe9c16f97b45f8a</td>
+<td>f88197465ea7920adcdbec7375364d82</td>
+<td>delivered</td>
+<td>2017-11-18 19:28:06</td>
+<td>2017-11-18 19:45:59</td>
+<td>2017-11-22 13:39:59</td>
+<td>2017-12-02 00:28:42</td>
+<td>2017-12-15 00:00:00</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">4</th>
+<td>ad21c59c0840e6cb83a9ceb5573f8159</td>
+<td>8ab97904e6daea8866dbdbc4fb7aad2c</td>
+<td>delivered</td>
+<td>2018-02-13 21:18:39</td>
+<td>2018-02-13 22:20:29</td>
+<td>2018-02-14 19:46:34</td>
+<td>2018-02-16 18:17:02</td>
+<td>2018-02-26 00:00:00</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+</section>
+<section id="features-understanding" class="level3">
+<h3 class="anchored" data-anchor-id="features-understanding">4.1.2. Features Understanding</h3>
+<p>The following tables summarize the main features used from the olist_order_items_dataset and olist_orders_dataset, including their descriptions and data types. Only variables relevant to order sequencing and scheduling are considered in this project.</p>
+<div id="a49d0583" class="cell" data-execution_count="4">
+<details class="code-fold">
+<summary>load orders data</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1"></a>order_items_features <span class="op">=</span> pd.DataFrame({</span>
+<span id="cb4-2"><a href="#cb4-2"></a>    <span class="st">"Feature"</span>: [</span>
+<span id="cb4-3"><a href="#cb4-3"></a>        <span class="st">"order_id"</span>,</span>
+<span id="cb4-4"><a href="#cb4-4"></a>        <span class="st">"order_item_id"</span>,</span>
+<span id="cb4-5"><a href="#cb4-5"></a>        <span class="st">"product_id"</span>,</span>
+<span id="cb4-6"><a href="#cb4-6"></a>        <span class="st">"seller_id"</span>,</span>
+<span id="cb4-7"><a href="#cb4-7"></a>        <span class="st">"shipping_limit_date"</span>,</span>
+<span id="cb4-8"><a href="#cb4-8"></a>        <span class="st">"price"</span>,</span>
+<span id="cb4-9"><a href="#cb4-9"></a>        <span class="st">"freight_value"</span></span>
+<span id="cb4-10"><a href="#cb4-10"></a>    ],</span>
+<span id="cb4-11"><a href="#cb4-11"></a>    <span class="st">"Description"</span>: [</span>
+<span id="cb4-12"><a href="#cb4-12"></a>        <span class="st">"Unique identifier of an order"</span>,</span>
+<span id="cb4-13"><a href="#cb4-13"></a>        <span class="st">"Sequential number of the item within the order"</span>,</span>
+<span id="cb4-14"><a href="#cb4-14"></a>        <span class="st">"Unique identifier of the product"</span>,</span>
+<span id="cb4-15"><a href="#cb4-15"></a>        <span class="st">"Unique identifier of the seller"</span>,</span>
+<span id="cb4-16"><a href="#cb4-16"></a>        <span class="st">"Deadline for the seller to ship the item"</span>,</span>
+<span id="cb4-17"><a href="#cb4-17"></a>        <span class="st">"Price of the item"</span>,</span>
+<span id="cb4-18"><a href="#cb4-18"></a>        <span class="st">"Shipping cost of the item"</span></span>
+<span id="cb4-19"><a href="#cb4-19"></a>    ],</span>
+<span id="cb4-20"><a href="#cb4-20"></a>    <span class="st">"Data Type"</span>: [</span>
+<span id="cb4-21"><a href="#cb4-21"></a>        <span class="st">"Categorical (string)"</span>,</span>
+<span id="cb4-22"><a href="#cb4-22"></a>        <span class="st">"Integer"</span>,</span>
+<span id="cb4-23"><a href="#cb4-23"></a>        <span class="st">"Categorical (string)"</span>,</span>
+<span id="cb4-24"><a href="#cb4-24"></a>        <span class="st">"Categorical (string)"</span>,</span>
+<span id="cb4-25"><a href="#cb4-25"></a>        <span class="st">"Datetime"</span>,</span>
+<span id="cb4-26"><a href="#cb4-26"></a>        <span class="st">"Numeric (float)"</span>,</span>
+<span id="cb4-27"><a href="#cb4-27"></a>        <span class="st">"Numeric (float)"</span></span>
+<span id="cb4-28"><a href="#cb4-28"></a>    ]</span>
+<span id="cb4-29"><a href="#cb4-29"></a>})</span>
+<span id="cb4-30"><a href="#cb4-30"></a></span>
+<span id="cb4-31"><a href="#cb4-31"></a>order_items_features</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-display" data-execution_count="30">
+<div>
+
+
+<table class="dataframe caption-top table table-sm table-striped small" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">Feature</th>
+<th data-quarto-table-cell-role="th">Description</th>
+<th data-quarto-table-cell-role="th">Data Type</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">0</th>
+<td>order_id</td>
+<td>Unique identifier of an order</td>
+<td>Categorical (string)</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">1</th>
+<td>order_item_id</td>
+<td>Sequential number of the item within the order</td>
+<td>Integer</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">2</th>
+<td>product_id</td>
+<td>Unique identifier of the product</td>
+<td>Categorical (string)</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">3</th>
+<td>seller_id</td>
+<td>Unique identifier of the seller</td>
+<td>Categorical (string)</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">4</th>
+<td>shipping_limit_date</td>
+<td>Deadline for the seller to ship the item</td>
+<td>Datetime</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">5</th>
+<td>price</td>
+<td>Price of the item</td>
+<td>Numeric (float)</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">6</th>
+<td>freight_value</td>
+<td>Shipping cost of the item</td>
+<td>Numeric (float)</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+<p>The following tables summarize the main features used from the olist_order_items_dataset and olist_orders_dataset, including their descriptions and data types. Only variables relevant to order sequencing and scheduling are considered in this project.</p>
+<div id="be21f9d0" class="cell" data-execution_count="5">
+<details class="code-fold">
+<summary>Show code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1"></a>orders_features <span class="op">=</span> pd.DataFrame({</span>
+<span id="cb5-2"><a href="#cb5-2"></a>    <span class="st">"Feature"</span>: [</span>
+<span id="cb5-3"><a href="#cb5-3"></a>        <span class="st">"order_id"</span>,</span>
+<span id="cb5-4"><a href="#cb5-4"></a>        <span class="st">"customer_id"</span>,</span>
+<span id="cb5-5"><a href="#cb5-5"></a>        <span class="st">"order_status"</span>,</span>
+<span id="cb5-6"><a href="#cb5-6"></a>        <span class="st">"order_purchase_timestamp"</span>,</span>
+<span id="cb5-7"><a href="#cb5-7"></a>        <span class="st">"order_approved_at"</span>,</span>
+<span id="cb5-8"><a href="#cb5-8"></a>        <span class="st">"order_delivered_carrier_date"</span>,</span>
+<span id="cb5-9"><a href="#cb5-9"></a>        <span class="st">"order_delivered_customer_date"</span>,</span>
+<span id="cb5-10"><a href="#cb5-10"></a>        <span class="st">"order_estimated_delivery_date"</span></span>
+<span id="cb5-11"><a href="#cb5-11"></a>    ],</span>
+<span id="cb5-12"><a href="#cb5-12"></a>    <span class="st">"Description"</span>: [</span>
+<span id="cb5-13"><a href="#cb5-13"></a>        <span class="st">"Unique identifier of an order"</span>,</span>
+<span id="cb5-14"><a href="#cb5-14"></a>        <span class="st">"Unique identifier of the customer"</span>,</span>
+<span id="cb5-15"><a href="#cb5-15"></a>        <span class="st">"Current status of the order"</span>,</span>
+<span id="cb5-16"><a href="#cb5-16"></a>        <span class="st">"Time when the customer placed the order"</span>,</span>
+<span id="cb5-17"><a href="#cb5-17"></a>        <span class="st">"Time when payment was approved"</span>,</span>
+<span id="cb5-18"><a href="#cb5-18"></a>        <span class="st">"Time when order was handed to the carrier"</span>,</span>
+<span id="cb5-19"><a href="#cb5-19"></a>        <span class="st">"Time when order was delivered to customer"</span>,</span>
+<span id="cb5-20"><a href="#cb5-20"></a>        <span class="st">"Estimated delivery deadline"</span></span>
+<span id="cb5-21"><a href="#cb5-21"></a>    ],</span>
+<span id="cb5-22"><a href="#cb5-22"></a>    <span class="st">"Data Type"</span>: [</span>
+<span id="cb5-23"><a href="#cb5-23"></a>        <span class="st">"Categorical (string)"</span>,</span>
+<span id="cb5-24"><a href="#cb5-24"></a>        <span class="st">"Categorical (string)"</span>,</span>
+<span id="cb5-25"><a href="#cb5-25"></a>        <span class="st">"Categorical"</span>,</span>
+<span id="cb5-26"><a href="#cb5-26"></a>        <span class="st">"Datetime"</span>,</span>
+<span id="cb5-27"><a href="#cb5-27"></a>        <span class="st">"Datetime"</span>,</span>
+<span id="cb5-28"><a href="#cb5-28"></a>        <span class="st">"Datetime"</span>,</span>
+<span id="cb5-29"><a href="#cb5-29"></a>        <span class="st">"Datetime"</span>,</span>
+<span id="cb5-30"><a href="#cb5-30"></a>        <span class="st">"Datetime"</span></span>
+<span id="cb5-31"><a href="#cb5-31"></a>    ]</span>
+<span id="cb5-32"><a href="#cb5-32"></a>})</span>
+<span id="cb5-33"><a href="#cb5-33"></a></span>
+<span id="cb5-34"><a href="#cb5-34"></a>orders_features</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-display" data-execution_count="31">
+<div>
+
+
+<table class="dataframe caption-top table table-sm table-striped small" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">Feature</th>
+<th data-quarto-table-cell-role="th">Description</th>
+<th data-quarto-table-cell-role="th">Data Type</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">0</th>
+<td>order_id</td>
+<td>Unique identifier of an order</td>
+<td>Categorical (string)</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">1</th>
+<td>customer_id</td>
+<td>Unique identifier of the customer</td>
+<td>Categorical (string)</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">2</th>
+<td>order_status</td>
+<td>Current status of the order</td>
+<td>Categorical</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">3</th>
+<td>order_purchase_timestamp</td>
+<td>Time when the customer placed the order</td>
+<td>Datetime</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">4</th>
+<td>order_approved_at</td>
+<td>Time when payment was approved</td>
+<td>Datetime</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">5</th>
+<td>order_delivered_carrier_date</td>
+<td>Time when order was handed to the carrier</td>
+<td>Datetime</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">6</th>
+<td>order_delivered_customer_date</td>
+<td>Time when order was delivered to customer</td>
+<td>Datetime</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">7</th>
+<td>order_estimated_delivery_date</td>
+<td>Estimated delivery deadline</td>
+<td>Datetime</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+<p>From the available features, only variables that directly contribute to modeling a single-machine scheduling problem are retained. Specifically, <strong>seller_id</strong> is used to define independent seller systems, <strong>order_approved_at</strong> represents the <strong>arrival time of an order</strong>, and <strong>order_estimated_delivery_date</strong> serves as the due date (deadline), and the number of items per order is used as a proxy for processing time. Other features are excluded as they do not influence sequencing decisions or scheduling priorities.</p>
+</section>
+</section>
+<section id="seller-separation" class="level2">
+<h2 class="anchored" data-anchor-id="seller-separation"><span style="color:#990000;"><strong>4.2. Seller Separation</strong></span></h2>
+<p>The Olist dataset contains multiple sellers, each operating independently. To model order processing as a single-machine scheduling problem, sellers are first identified and separated so that each seller’s orders form an independent scheduling system.</p>
+<div id="f8ca1ca8" class="cell" data-execution_count="6">
+<details class="code-fold">
+<summary>load orders data</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1"></a>num_sellers <span class="op">=</span> order_items[<span class="st">"seller_id"</span>].nunique()</span>
+<span id="cb6-2"><a href="#cb6-2"></a><span class="bu">print</span>(<span class="ss">f"There are a total of </span><span class="sc">{</span>num_sellers<span class="sc">}</span><span class="ss"> unique sellers."</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>There are a total of 3095 unique sellers.</code></pre>
+</div>
+</div>
+<p>To analyze order flow at the seller level, orders are grouped by seller_id. For each seller, a scheduling table is constructed where each order is treated as one job. The order purchase time is defined as the arrival time, the estimated delivery date is used as the due date, and the number of items in an order is used as a proxy for processing time.</p>
+<p>The following function generates a scheduling table for any selected seller:</p>
+<div id="4b691cd0" class="cell" data-execution_count="7">
+<details class="code-fold">
+<summary>load orders data</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1"></a><span class="kw">def</span> create_scheduling_table(seller_id, order_items, orders):</span>
+<span id="cb8-2"><a href="#cb8-2"></a>    seller_items <span class="op">=</span> order_items[order_items[<span class="st">"seller_id"</span>] <span class="op">==</span> seller_id]</span>
+<span id="cb8-3"><a href="#cb8-3"></a></span>
+<span id="cb8-4"><a href="#cb8-4"></a>    scheduling_table <span class="op">=</span> (</span>
+<span id="cb8-5"><a href="#cb8-5"></a>        seller_items</span>
+<span id="cb8-6"><a href="#cb8-6"></a>        .merge(orders, on<span class="op">=</span><span class="st">"order_id"</span>)</span>
+<span id="cb8-7"><a href="#cb8-7"></a>        .groupby(<span class="st">"order_id"</span>)</span>
+<span id="cb8-8"><a href="#cb8-8"></a>        .agg(</span>
+<span id="cb8-9"><a href="#cb8-9"></a>            arrival_time<span class="op">=</span>(<span class="st">"order_approved_at"</span>, <span class="st">"first"</span>),</span>
+<span id="cb8-10"><a href="#cb8-10"></a>            due_date<span class="op">=</span>(<span class="st">"order_estimated_delivery_date"</span>, <span class="st">"first"</span>),</span>
+<span id="cb8-11"><a href="#cb8-11"></a>            processing_time<span class="op">=</span>(<span class="st">"order_item_id"</span>, <span class="st">"count"</span>)</span>
+<span id="cb8-12"><a href="#cb8-12"></a>        )</span>
+<span id="cb8-13"><a href="#cb8-13"></a>        .reset_index()</span>
+<span id="cb8-14"><a href="#cb8-14"></a>    )</span>
+<span id="cb8-15"><a href="#cb8-15"></a>    <span class="cf">return</span> scheduling_table</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+</div>
+<p>To ensure meaningful sequencing analysis, sellers are ranked based on the total number of items ordered. This allows the selection of sellers with sufficient order volume.</p>
+<div id="d2e88151" class="cell" data-execution_count="8">
+<details class="code-fold">
+<summary>rank sellers by number of items</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>orders_per_seller_df <span class="op">=</span> (</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>order_items</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>.groupby(<span class="st">"seller_id"</span>)</span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>.size()</span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>.reset_index(name<span class="op">=</span><span class="st">"number_of_items"</span>)</span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>.sort_values(by<span class="op">=</span><span class="st">"number_of_items"</span>, ascending<span class="op">=</span><span class="va">False</span>)</span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a>orders_per_seller_df.head()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-display" data-execution_count="34">
+<div>
+
+
+<table class="dataframe caption-top table table-sm table-striped small" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">seller_id</th>
+<th data-quarto-table-cell-role="th">number_of_items</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">1235</th>
+<td>6560211a19b47992c3666cc44a7e94c0</td>
+<td>2033</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">881</th>
+<td>4a3ca9315b744ce9f8e9374361493884</td>
+<td>1987</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">368</th>
+<td>1f50f920176fa81dab994f9023523100</td>
+<td>1931</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">2481</th>
+<td>cc419e0650a3c5ba77189a1882b7556a</td>
+<td>1775</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">2643</th>
+<td>da8622b14eb17ae2831f4ac5b9dab84a</td>
+<td>1551</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+</section>
+<section id="data-cleaning" class="level2">
+<h2 class="anchored" data-anchor-id="data-cleaning"><span style="color:#990000;"><strong>4.3. Data Cleaning</strong></span></h2>
+<p>Before applying the sequencing models, the dataset is checked for missing values and data type consistency. In particular, timestamp variables must be converted to datetime format to ensure accurate computation of arrival times, due dates, waiting times, and tardiness.</p>
+<p>Great, this fits perfectly as Section 4.3 Data Cleaning. Below is a clean, concise, and well-structured 4.3 section, with clear explanations and correct Python code that you can paste directly into your Quarto document.</p>
+<p><span style="color:#990000;">4.3. Data Cleaning</span></p>
+<p>Before applying the sequencing models, the dataset is checked for missing values and data type consistency. In particular, timestamp variables must be converted to datetime format to ensure accurate computation of arrival times, due dates, waiting times, and tardiness.</p>
+<p>4.3.1 Check for Missing Values</p>
+<p>The following code checks for missing values in both datasets.</p>
+<div id="5fc777bf" class="cell" data-execution_count="9">
+<details class="code-fold">
+<summary>Data Info</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1"></a>order_items.isnull().<span class="bu">sum</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-display" data-execution_count="35">
+<pre><code>order_id               0
+order_item_id          0
+product_id             0
+seller_id              0
+shipping_limit_date    0
+price                  0
+freight_value          0
+dtype: int64</code></pre>
+</div>
+</div>
+<div id="c654cdc0" class="cell" data-execution_count="10">
+<details class="code-fold">
+<summary>Data Info</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1"></a>orders.isnull().<span class="bu">sum</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-display" data-execution_count="36">
+<pre><code>order_id                            0
+customer_id                         0
+order_status                        0
+order_purchase_timestamp            0
+order_approved_at                 160
+order_delivered_carrier_date     1783
+order_delivered_customer_date    2965
+order_estimated_delivery_date       0
+dtype: int64</code></pre>
+</div>
+</div>
+<div id="a948c44e" class="cell" data-execution_count="11">
+<details class="code-fold">
+<summary>Removing Missing Values</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1"></a>valid_orders <span class="op">=</span> orders[orders[<span class="st">"order_approved_at"</span>].notna()]</span>
+<span id="cb14-2"><a href="#cb14-2"></a><span class="co"># Keep only valid orders in orders table</span></span>
+<span id="cb14-3"><a href="#cb14-3"></a>orders_clean <span class="op">=</span> valid_orders.copy()</span>
+<span id="cb14-4"><a href="#cb14-4"></a></span>
+<span id="cb14-5"><a href="#cb14-5"></a><span class="co"># Keep only order_items belonging to valid orders</span></span>
+<span id="cb14-6"><a href="#cb14-6"></a>order_items_clean <span class="op">=</span> order_items[</span>
+<span id="cb14-7"><a href="#cb14-7"></a>    order_items[<span class="st">"order_id"</span>].isin(orders_clean[<span class="st">"order_id"</span>])</span>
+<span id="cb14-8"><a href="#cb14-8"></a>]</span>
+<span id="cb14-9"><a href="#cb14-9"></a>orders_clean <span class="op">=</span> orders_clean.reset_index(drop<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb14-10"><a href="#cb14-10"></a>order_items_clean <span class="op">=</span> order_items_clean.reset_index(drop<span class="op">=</span><span class="va">True</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+</div>
+<div id="01997a47" class="cell" data-execution_count="12">
+<details class="code-fold">
+<summary>Data Info</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb15"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1"></a>orders <span class="op">=</span> orders_clean</span>
+<span id="cb15-2"><a href="#cb15-2"></a>order_items <span class="op">=</span> order_items_clean</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+</div>
+<p>Moreover, to perform time-based calculations, all relevant date columns are converted to datetime format.</p>
+<div id="c3145d16" class="cell" data-execution_count="13">
+<details class="code-fold">
+<summary>Convert to datetime</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb16"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1"></a>order_items[<span class="st">"shipping_limit_date"</span>] <span class="op">=</span> pd.to_datetime(</span>
+<span id="cb16-2"><a href="#cb16-2"></a>order_items[<span class="st">"shipping_limit_date"</span>]</span>
+<span id="cb16-3"><a href="#cb16-3"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+</div>
+<div id="ded26fce" class="cell" data-execution_count="14">
+<details class="code-fold">
+<summary>convert orders date columns</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb17"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>date_columns <span class="op">=</span> [</span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a><span class="st">"order_purchase_timestamp"</span>,</span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a><span class="st">"order_approved_at"</span>,</span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a><span class="st">"order_delivered_carrier_date"</span>,</span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a><span class="st">"order_delivered_customer_date"</span>,</span>
+<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a><span class="st">"order_estimated_delivery_date"</span></span>
+<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a>]</span>
+<span id="cb17-8"><a href="#cb17-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-9"><a href="#cb17-9" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> col <span class="kw">in</span> date_columns:</span>
+<span id="cb17-10"><a href="#cb17-10" aria-hidden="true" tabindex="-1"></a>    orders[col] <span class="op">=</span> pd.to_datetime(orders[col])</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+</div>
+<p>After conversion, data types are verified to ensure correctness.</p>
+<div id="104bc06c" class="cell" data-execution_count="15">
+<details class="code-fold">
+<summary>verify data types</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb18"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>orders.dtypes</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-display" data-execution_count="41">
+<pre><code>order_id                                 object
+customer_id                              object
+order_status                             object
+order_purchase_timestamp         datetime64[ns]
+order_approved_at                datetime64[ns]
+order_delivered_carrier_date     datetime64[ns]
+order_delivered_customer_date    datetime64[ns]
+order_estimated_delivery_date    datetime64[ns]
+dtype: object</code></pre>
+</div>
+</div>
+<div id="707c66fd" class="cell" data-execution_count="16">
+<details class="code-fold">
+<summary>verify data types</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb20"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>order_items.dtypes</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-display" data-execution_count="42">
+<pre><code>order_id                       object
+order_item_id                   int64
+product_id                     object
+seller_id                      object
+shipping_limit_date    datetime64[ns]
+price                         float64
+freight_value                 float64
+dtype: object</code></pre>
+</div>
+</div>
+<p>All timestamp variables are now stored as datetime objects, allowing accurate computation of arrival times, due dates, and scheduling performance metrics.</p>
+</section>
+<section id="sequencing-model-formulation" class="level2">
+<h2 class="anchored" data-anchor-id="sequencing-model-formulation"><span style="color:#990000;"><strong>4.4. Sequencing Model Formulation</strong></span></h2>
+<section id="scheduling-variables-and-performance-measures" class="level3">
+<h3 class="anchored" data-anchor-id="scheduling-variables-and-performance-measures"><span style="color:#990000;"><strong>4.4.1. Scheduling Variables and Performance Measures</strong></span></h3>
+<p>In this project, order processing for each seller is modeled as a <strong>single-machine scheduling problem</strong>. Each order is treated as a job that must be processed by a single server (the seller), with <strong>no preemption</strong> and <strong>only one job processed at a time</strong>.</p>
+</section>
+<section id="scheduling-variables" class="level3">
+<h3 class="anchored" data-anchor-id="scheduling-variables">Scheduling Variables</h3>
+<p>For each order (job) <span class="math inline">\(i\)</span>, the following scheduling variables are defined:</p>
+<ul>
+<li><p><strong>Arrival time (<span class="math inline">\(r_i\)</span>)</strong><br>
+The time at which order <span class="math inline">\(i\)</span> becomes available for processing.<br>
+In this study, <span class="math inline">\(r_i\)</span> is defined as the <strong>order_approved_at</strong>.</p></li>
+<li><p><strong>Processing time (<span class="math inline">\(p_i\)</span>)</strong><br>
+The time required to complete order <span class="math inline">\(i\)</span>.<br>
+Since actual handling times are unavailable, <span class="math inline">\(p_i\)</span> is approximated by the <strong>number of items in the order</strong>.</p></li>
+<li><p><strong>Due date (<span class="math inline">\(d_i\)</span>)</strong><br>
+The promised completion time for order <span class="math inline">\(i\)</span>.<br>
+This is defined as the <strong>estimated delivery date</strong> provided by the platform.</p></li>
+<li><p><strong>Sequence (π)</strong><br>
+An ordered list of jobs that specifies the processing order, determined by a sequencing rule such as <strong>FCFS</strong>, <strong>SPT</strong>, or <strong>EDD</strong>.</p></li>
+</ul>
+</section>
+<section id="performance-measures" class="level3">
+<h3 class="anchored" data-anchor-id="performance-measures">Performance Measures</h3>
+<p>To evaluate the effectiveness of each sequencing rule, the following standard performance measures are used:</p>
+<ul>
+<li><p><strong>Start time (<span class="math inline">\(S_i\)</span>)</strong><br>
+The time at which processing of order <span class="math inline">\(i\)</span> begins.</p></li>
+<li><p><strong>Completion time (<span class="math inline">\(C_i\)</span>)</strong><br>
+The time at which processing of order <span class="math inline">\(i\)</span> finishes.</p></li>
+<li><p><strong>Waiting time (<span class="math inline">\(W_i\)</span>)</strong><br>
+The amount of time order <span class="math inline">\(i\)</span> waits before processing:</p>
+<p><span class="math display">\[
+W_i = S_i - r_i
+\]</span></p></li>
+<li><p><strong>Tardiness (<span class="math inline">\(T_i\)</span>)</strong><br>
+The amount by which order <em>i</em> is completed after its due date:</p>
+<p><span class="math display">\[
+T_i = \max(0, C_i - d_i)
+\]</span></p></li>
+</ul>
+<p>These performance measures are commonly used in single-machine scheduling problems and allow for a quantitative comparison of different sequencing rules in terms of service efficiency and deadline compliance.</p>
+</section>
+<section id="schedule-simulation-procedure" class="level3">
+<h3 class="anchored" data-anchor-id="schedule-simulation-procedure"><span style="color:#990000;"><strong>4.4.2 Schedule Simulation Procedure</strong></span></h3>
+<p>Once a processing sequence is determined by a sequencing rule, the order processing schedule is simulated using standard single-machine scheduling logic. Given a fixed sequence of jobs, start times, completion times, waiting times, and tardiness values are computed sequentially.</p>
+<p>Let jobs be indexed according to the chosen sequence. For each order (job) <span class="math inline">\(i\)</span>, processing begins either when the previous job is completed or when the order arrives, whichever occurs later. The start time is therefore defined as:</p>
+<p><span class="math display">\[
+S_i = \max(C_{i-1}, r_i)
+\]</span></p>
+<p>The completion time of job <span class="math inline">\(i\)</span> is then given by:</p>
+<p><span class="math display">\[
+C_i = S_i + p_i
+\]</span></p>
+<p>Using the computed start and completion times, performance measures are obtained as follows. The waiting time of job <span class="math inline">\(i\)</span> is defined as the difference between its start time and arrival time:</p>
+<p><span class="math display">\[
+W_i = S_i - r_i
+\]</span></p>
+<p>The tardiness of job <span class="math inline">\(i\)</span> measures the extent to which completion exceeds the due date and is defined as:</p>
+<p><span class="math display">\[
+T_i = \max(0, C_i - d_i)
+\]</span></p>
+<p>This simulation procedure is applied uniformly across all sequencing rules. By holding the simulation logic constant and varying only the job sequence, the impact of different sequencing rules on waiting time and tardiness can be fairly and consistently compared.</p>
+<div id="1a2fed82" class="cell" data-execution_count="17">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb22"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb22-1"><a href="#cb22-1"></a><span class="kw">def</span> simulate_schedule_and_metrics(df):</span>
+<span id="cb22-2"><a href="#cb22-2"></a>    df <span class="op">=</span> df.copy()</span>
+<span id="cb22-3"><a href="#cb22-3"></a>    df[<span class="st">"start_time"</span>] <span class="op">=</span> pd.NaT</span>
+<span id="cb22-4"><a href="#cb22-4"></a>    df[<span class="st">"completion_time"</span>] <span class="op">=</span> pd.NaT</span>
+<span id="cb22-5"><a href="#cb22-5"></a>    df[<span class="st">"waiting_time"</span>] <span class="op">=</span> <span class="dv">0</span></span>
+<span id="cb22-6"><a href="#cb22-6"></a>    df[<span class="st">"tardiness"</span>] <span class="op">=</span> <span class="dv">0</span></span>
+<span id="cb22-7"><a href="#cb22-7"></a></span>
+<span id="cb22-8"><a href="#cb22-8"></a>    current_time <span class="op">=</span> df.iloc[<span class="dv">0</span>][<span class="st">"arrival_time"</span>]</span>
+<span id="cb22-9"><a href="#cb22-9"></a></span>
+<span id="cb22-10"><a href="#cb22-10"></a>    <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="bu">len</span>(df)):</span>
+<span id="cb22-11"><a href="#cb22-11"></a>        arrival <span class="op">=</span> df.iloc[i][<span class="st">"arrival_time"</span>]</span>
+<span id="cb22-12"><a href="#cb22-12"></a>        processing <span class="op">=</span> df.iloc[i][<span class="st">"processing_time"</span>]</span>
+<span id="cb22-13"><a href="#cb22-13"></a>        due <span class="op">=</span> df.iloc[i][<span class="st">"due_date"</span>]</span>
+<span id="cb22-14"><a href="#cb22-14"></a></span>
+<span id="cb22-15"><a href="#cb22-15"></a>        start_time <span class="op">=</span> <span class="bu">max</span>(current_time, arrival)</span>
+<span id="cb22-16"><a href="#cb22-16"></a>        completion_time <span class="op">=</span> start_time <span class="op">+</span> pd.to_timedelta(processing, unit<span class="op">=</span><span class="st">"D"</span>)</span>
+<span id="cb22-17"><a href="#cb22-17"></a></span>
+<span id="cb22-18"><a href="#cb22-18"></a>        df.loc[df.index[i], <span class="st">"start_time"</span>] <span class="op">=</span> start_time</span>
+<span id="cb22-19"><a href="#cb22-19"></a>        df.loc[df.index[i], <span class="st">"completion_time"</span>] <span class="op">=</span> completion_time</span>
+<span id="cb22-20"><a href="#cb22-20"></a>        df.loc[df.index[i], <span class="st">"waiting_time"</span>] <span class="op">=</span> (start_time <span class="op">-</span> arrival).days</span>
+<span id="cb22-21"><a href="#cb22-21"></a>        df.loc[df.index[i], <span class="st">"tardiness"</span>] <span class="op">=</span> <span class="bu">max</span>(<span class="dv">0</span>, (completion_time <span class="op">-</span> due).days)</span>
+<span id="cb22-22"><a href="#cb22-22"></a></span>
+<span id="cb22-23"><a href="#cb22-23"></a>        current_time <span class="op">=</span> completion_time</span>
+<span id="cb22-24"><a href="#cb22-24"></a></span>
+<span id="cb22-25"><a href="#cb22-25"></a>    metrics <span class="op">=</span> {</span>
+<span id="cb22-26"><a href="#cb22-26"></a>        <span class="st">"Average waiting time"</span>: df[<span class="st">"waiting_time"</span>].mean(),</span>
+<span id="cb22-27"><a href="#cb22-27"></a>        <span class="st">"Average tardiness"</span>: df[<span class="st">"tardiness"</span>].mean(),</span>
+<span id="cb22-28"><a href="#cb22-28"></a>        <span class="st">"Maximum tardiness"</span>: df[<span class="st">"tardiness"</span>].<span class="bu">max</span>(),</span>
+<span id="cb22-29"><a href="#cb22-29"></a>        <span class="st">"Late job percentage"</span>: (df[<span class="st">"tardiness"</span>] <span class="op">&gt;</span> <span class="dv">0</span>).mean() <span class="op">*</span> <span class="dv">100</span>,</span>
+<span id="cb22-30"><a href="#cb22-30"></a>        <span class="st">"Makespan (days)"</span>: (df[<span class="st">"completion_time"</span>].<span class="bu">max</span>() <span class="op">-</span> df[<span class="st">"arrival_time"</span>].<span class="bu">min</span>()).days</span>
+<span id="cb22-31"><a href="#cb22-31"></a>    }</span>
+<span id="cb22-32"><a href="#cb22-32"></a></span>
+<span id="cb22-33"><a href="#cb22-33"></a>    <span class="cf">return</span> df, metrics</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</section>
+</section>
+<section id="first-come-first-served-fcfs" class="level2">
+<h2 class="anchored" data-anchor-id="first-come-first-served-fcfs"><span style="color:#990000;"><strong>4.5 First Come First Served (FCFS)</strong></span></h2>
+<div class="callout callout-style-default callout-tip no-icon callout-titled" title="Algorithm">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Algorithm
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<ul>
+<li>Step 1: Sort all orders by their arrival time from earliest to latest.</li>
+<li>Step 2: Select the first order in the list.</li>
+<li>Step 3: Start processing the selected order as soon as the machine is available.</li>
+<li>Step 4: Complete the order without interruption.</li>
+<li>Step 5: Move to the next order in the arrival_time order.</li>
+<li>Step 6: Repeat unitl all jobs are processed.</li>
+</ul>
+</div>
+</div>
+<section id="fcfs-python-implementation" class="level3">
+<h3 class="anchored" data-anchor-id="fcfs-python-implementation">FCFS Python Implementation</h3>
+<div id="7a58b89a" class="cell" data-execution_count="18">
+<details class="code-fold">
+<summary>FCFS</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb23"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb23-1"><a href="#cb23-1"></a><span class="kw">def</span> FCFS(df):</span>
+<span id="cb23-2"><a href="#cb23-2"></a>    <span class="cf">return</span> df.sort_values(<span class="st">"arrival_time"</span>).reset_index(drop<span class="op">=</span><span class="va">True</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+</div>
+</section>
+</section>
+<section id="shortest-processing-time-spt" class="level2">
+<h2 class="anchored" data-anchor-id="shortest-processing-time-spt"><span style="color:#990000;"><strong>4.6 Shortest Processing Time (SPT)</strong></span></h2>
+<div class="callout callout-style-default callout-tip no-icon callout-titled" title="Algorithm">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Algorithm
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<ul>
+<li>Step 1: Sort all orders by their processing time from shortest to longest.</li>
+<li>Step 2: Select the order with the smallest processing time.</li>
+<li>Step 3: Start processing the selected order as soon as the machine is available.</li>
+<li>Step 4: Complete the order without interruption.</li>
+<li>Step 5: Move to the next order in the processing_time order.</li>
+<li>Step 6: Repeat until all jobs are processed.</li>
+</ul>
+</div>
+</div>
+<section id="spt-python-implementation" class="level3">
+<h3 class="anchored" data-anchor-id="spt-python-implementation">SPT Python Implementation</h3>
+<div id="d5254d9b" class="cell" data-execution_count="19">
+<details class="code-fold">
+<summary>SPT</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb24"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb24-1"><a href="#cb24-1"></a><span class="kw">def</span> SPT(df):</span>
+<span id="cb24-2"><a href="#cb24-2"></a>    <span class="cf">return</span> df.sort_values(<span class="st">"processing_time"</span>).reset_index(drop<span class="op">=</span><span class="va">True</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+</div>
+</section>
+</section>
+<section id="earliest-due-date-edd" class="level2">
+<h2 class="anchored" data-anchor-id="earliest-due-date-edd"><span style="color:#990000;"><strong>4.7 Earliest Due Date (EDD)</strong></span></h2>
+<div class="callout callout-style-default callout-tip no-icon callout-titled" title="Algorithm">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Algorithm
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<ul>
+<li>Step 1: Sort all orders by their due dates from earliest to latest.</li>
+<li>Step 2: Select the order with the earliest due date.</li>
+<li>Step 3: Start processing the selected order as soon as the machine is available.</li>
+<li>Step 4: Complete the order without interruption.</li>
+<li>Step 5: Move to the next order in the due_date order.</li>
+<li>Step 6: Repeat until all jobs are processed.</li>
+</ul>
+</div>
+</div>
+<section id="edd-python-implementation" class="level3">
+<h3 class="anchored" data-anchor-id="edd-python-implementation">EDD Python Implementation</h3>
+<div id="6b8f6a99" class="cell" data-execution_count="20">
+<details class="code-fold">
+<summary>EDD</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb25"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb25-1"><a href="#cb25-1"></a><span class="kw">def</span> EDD(df):</span>
+<span id="cb25-2"><a href="#cb25-2"></a>    <span class="cf">return</span> df.sort_values(<span class="st">"due_date"</span>).reset_index(drop<span class="op">=</span><span class="va">True</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+</div>
+</section>
+</section>
+<section id="example-implementation-and-results" class="level2">
+<h2 class="anchored" data-anchor-id="example-implementation-and-results"><span style="color:#990000;"><strong>4.8 Example Implementation and Results</strong></span></h2>
+<p>To illustrate the proposed scheduling framework, three sellers are selected randomly from the dataset. For each seller, a scheduling table is constructed and the FCFS, SPT, and EDD sequencing rules are applied. The resulting schedules are simulated, and performance metrics are computed to compare the impact of each sequencing rule.</p>
+<div id="a92fad5d" class="cell" data-execution_count="21">
+<details class="code-fold">
+<summary>Randomize Three Seller’s IDs</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb26"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb26-1"><a href="#cb26-1"></a><span class="im">import</span> random</span>
+<span id="cb26-2"><a href="#cb26-2"></a></span>
+<span id="cb26-3"><a href="#cb26-3"></a>random_sellers <span class="op">=</span> random.sample(</span>
+<span id="cb26-4"><a href="#cb26-4"></a>    <span class="bu">list</span>(order_items[<span class="st">"seller_id"</span>].unique()),</span>
+<span id="cb26-5"><a href="#cb26-5"></a>    <span class="dv">3</span></span>
+<span id="cb26-6"><a href="#cb26-6"></a>)</span>
+<span id="cb26-7"><a href="#cb26-7"></a></span>
+<span id="cb26-8"><a href="#cb26-8"></a>random_sellers</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-display" data-execution_count="47">
+<pre><code>['41958cbd3335433c8740300e8cd600d5',
+ '6f1a1263039c76e68f40a8e536b1da6a',
+ '0df3984f9dfb3d49ac6366acbd3bbb85']</code></pre>
+</div>
+</div>
+<div id="e204b7bc" class="cell" data-execution_count="22">
+<details class="code-fold">
+<summary>perfoming scheduling</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb28"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb28-1"><a href="#cb28-1"></a>all_results <span class="op">=</span> {}</span>
+<span id="cb28-2"><a href="#cb28-2"></a></span>
+<span id="cb28-3"><a href="#cb28-3"></a><span class="cf">for</span> seller_id <span class="kw">in</span> random_sellers:</span>
+<span id="cb28-4"><a href="#cb28-4"></a>    schedule <span class="op">=</span> create_scheduling_table(seller_id, order_items, orders)</span>
+<span id="cb28-5"><a href="#cb28-5"></a></span>
+<span id="cb28-6"><a href="#cb28-6"></a>    _, fcfs_metrics <span class="op">=</span> simulate_schedule_and_metrics(FCFS(schedule))</span>
+<span id="cb28-7"><a href="#cb28-7"></a>    _, spt_metrics  <span class="op">=</span> simulate_schedule_and_metrics(SPT(schedule))</span>
+<span id="cb28-8"><a href="#cb28-8"></a>    _, edd_metrics  <span class="op">=</span> simulate_schedule_and_metrics(EDD(schedule))</span>
+<span id="cb28-9"><a href="#cb28-9"></a></span>
+<span id="cb28-10"><a href="#cb28-10"></a>    results_df <span class="op">=</span> pd.DataFrame({</span>
+<span id="cb28-11"><a href="#cb28-11"></a>        <span class="st">"Metric"</span>: <span class="bu">list</span>(fcfs_metrics.keys()),</span>
+<span id="cb28-12"><a href="#cb28-12"></a>        <span class="st">"FCFS"</span>: <span class="bu">list</span>(fcfs_metrics.values()),</span>
+<span id="cb28-13"><a href="#cb28-13"></a>        <span class="st">"SPT"</span>: <span class="bu">list</span>(spt_metrics.values()),</span>
+<span id="cb28-14"><a href="#cb28-14"></a>        <span class="st">"EDD"</span>: <span class="bu">list</span>(edd_metrics.values())</span>
+<span id="cb28-15"><a href="#cb28-15"></a>    })</span>
+<span id="cb28-16"><a href="#cb28-16"></a></span>
+<span id="cb28-17"><a href="#cb28-17"></a>    results_df[[<span class="st">"FCFS"</span>, <span class="st">"SPT"</span>, <span class="st">"EDD"</span>]] <span class="op">=</span> results_df[[<span class="st">"FCFS"</span>, <span class="st">"SPT"</span>, <span class="st">"EDD"</span>]].<span class="bu">round</span>(<span class="dv">2</span>)</span>
+<span id="cb28-18"><a href="#cb28-18"></a></span>
+<span id="cb28-19"><a href="#cb28-19"></a>    all_results[seller_id] <span class="op">=</span> results_df</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+</div>
+<div id="b2120bcf" class="cell" data-execution_count="23">
+<details class="code-fold">
+<summary>results</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb29"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb29-1"><a href="#cb29-1"></a><span class="cf">for</span> seller_id, result <span class="kw">in</span> all_results.items():</span>
+<span id="cb29-2"><a href="#cb29-2"></a>    <span class="bu">print</span>(<span class="ss">f"</span><span class="ch">\n</span><span class="ss">Results for Seller: </span><span class="sc">{</span>seller_id<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb29-3"><a href="#cb29-3"></a>    display(result)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Results for Seller: 41958cbd3335433c8740300e8cd600d5</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<div>
+
+
+<table class="dataframe caption-top table table-sm table-striped small" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">Metric</th>
+<th data-quarto-table-cell-role="th">FCFS</th>
+<th data-quarto-table-cell-role="th">SPT</th>
+<th data-quarto-table-cell-role="th">EDD</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">0</th>
+<td>Average waiting time</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">1</th>
+<td>Average tardiness</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">2</th>
+<td>Maximum tardiness</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">3</th>
+<td>Late job percentage</td>
+<td>0.0</td>
+<td>0.0</td>
+<td>0.0</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">4</th>
+<td>Makespan (days)</td>
+<td>1.0</td>
+<td>1.0</td>
+<td>1.0</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Results for Seller: 6f1a1263039c76e68f40a8e536b1da6a</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<div>
+
+
+<table class="dataframe caption-top table table-sm table-striped small" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">Metric</th>
+<th data-quarto-table-cell-role="th">FCFS</th>
+<th data-quarto-table-cell-role="th">SPT</th>
+<th data-quarto-table-cell-role="th">EDD</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">0</th>
+<td>Average waiting time</td>
+<td>0.0</td>
+<td>31.0</td>
+<td>0.75</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">1</th>
+<td>Average tardiness</td>
+<td>0.0</td>
+<td>27.0</td>
+<td>0.00</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">2</th>
+<td>Maximum tardiness</td>
+<td>0.0</td>
+<td>108.0</td>
+<td>0.00</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">3</th>
+<td>Late job percentage</td>
+<td>0.0</td>
+<td>25.0</td>
+<td>0.00</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">4</th>
+<td>Makespan (days)</td>
+<td>120.0</td>
+<td>125.0</td>
+<td>121.00</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Results for Seller: 0df3984f9dfb3d49ac6366acbd3bbb85</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<div>
+
+
+<table class="dataframe caption-top table table-sm table-striped small" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">Metric</th>
+<th data-quarto-table-cell-role="th">FCFS</th>
+<th data-quarto-table-cell-role="th">SPT</th>
+<th data-quarto-table-cell-role="th">EDD</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">0</th>
+<td>Average waiting time</td>
+<td>0.46</td>
+<td>199.74</td>
+<td>3.85</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">1</th>
+<td>Average tardiness</td>
+<td>0.00</td>
+<td>179.63</td>
+<td>0.00</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">2</th>
+<td>Maximum tardiness</td>
+<td>0.00</td>
+<td>454.00</td>
+<td>0.00</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">3</th>
+<td>Late job percentage</td>
+<td>0.00</td>
+<td>89.66</td>
+<td>0.00</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">4</th>
+<td>Makespan (days)</td>
+<td>464.00</td>
+<td>516.00</td>
+<td>464.00</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+<p>It is observed that for <strong>some sellers</strong>, all sequencing rules yield <strong>zero waiting time and zero tardiness</strong>. This occurs when sellers have <strong>very few orders or when order arrivals are sufficiently spaced in time</strong>, resulting in no congestion. In such cases, <strong>all jobs begin processing immediately</strong> upon arrival and are completed before their due dates, causing FCFS, SPT, and EDD to behave identically. Meaningful differences between sequencing rules emerge only for sellers with higher order volumes, where competition for processing capacity creates waiting and deadline violations.</p>
+<p>In order <strong>to fix this problem</strong>, we need to <strong>select sellers who have atleast 10 orders</strong>. This way, it supports our model more accuarately.</p>
+<div id="dc475801" class="cell" data-execution_count="24">
+<details class="code-fold">
+<summary>Show code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb33"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="co">"""</span></span>
+<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a><span class="co">#| code-fold: true </span></span>
+<span id="cb33-3"><a href="#cb33-3" aria-hidden="true" tabindex="-1"></a><span class="co">#| code-summary: Keep only sellers with at least 10 items</span></span>
+<span id="cb33-4"><a href="#cb33-4" aria-hidden="true" tabindex="-1"></a><span class="co">#| code-line-numbers: true</span></span>
+<span id="cb33-5"><a href="#cb33-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb33-6"><a href="#cb33-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Count number of items per seller</span></span>
+<span id="cb33-7"><a href="#cb33-7" aria-hidden="true" tabindex="-1"></a><span class="co">seller_item_counts = (</span></span>
+<span id="cb33-8"><a href="#cb33-8" aria-hidden="true" tabindex="-1"></a><span class="co">    order_items</span></span>
+<span id="cb33-9"><a href="#cb33-9" aria-hidden="true" tabindex="-1"></a><span class="co">    .groupby("seller_id")</span></span>
+<span id="cb33-10"><a href="#cb33-10" aria-hidden="true" tabindex="-1"></a><span class="co">    .size()</span></span>
+<span id="cb33-11"><a href="#cb33-11" aria-hidden="true" tabindex="-1"></a><span class="co">    .reset_index(name="num_items")</span></span>
+<span id="cb33-12"><a href="#cb33-12" aria-hidden="true" tabindex="-1"></a><span class="co">)</span></span>
+<span id="cb33-13"><a href="#cb33-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb33-14"><a href="#cb33-14" aria-hidden="true" tabindex="-1"></a><span class="co"># Keep only sellers with at least 10 items</span></span>
+<span id="cb33-15"><a href="#cb33-15" aria-hidden="true" tabindex="-1"></a><span class="co">active_sellers = seller_item_counts[</span></span>
+<span id="cb33-16"><a href="#cb33-16" aria-hidden="true" tabindex="-1"></a><span class="co">    seller_item_counts["num_items"] &gt;= 10</span></span>
+<span id="cb33-17"><a href="#cb33-17" aria-hidden="true" tabindex="-1"></a><span class="co">]["seller_id"]</span></span>
+<span id="cb33-18"><a href="#cb33-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb33-19"><a href="#cb33-19" aria-hidden="true" tabindex="-1"></a><span class="co">import random</span></span>
+<span id="cb33-20"><a href="#cb33-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb33-21"><a href="#cb33-21" aria-hidden="true" tabindex="-1"></a><span class="co">#random_sellers = random.sample(</span></span>
+<span id="cb33-22"><a href="#cb33-22" aria-hidden="true" tabindex="-1"></a><span class="co">#    list(active_sellers),</span></span>
+<span id="cb33-23"><a href="#cb33-23" aria-hidden="true" tabindex="-1"></a><span class="co">#    3</span></span>
+<span id="cb33-24"><a href="#cb33-24" aria-hidden="true" tabindex="-1"></a><span class="co">#)</span></span>
+<span id="cb33-25"><a href="#cb33-25" aria-hidden="true" tabindex="-1"></a><span class="co">"""</span></span>
+<span id="cb33-26"><a href="#cb33-26" aria-hidden="true" tabindex="-1"></a>random_sellers <span class="op">=</span> [<span class="st">"6560211a19b47992c3666cc44a7e94c0"</span>,<span class="st">"4a3ca9315b744ce9f8e9374361493884"</span>, <span class="st">"1f50f920176fa81dab994f9023523100"</span>]</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+</div>
+<div id="230b4410" class="cell" data-execution_count="25">
+<details class="code-fold">
+<summary>perfoming scheduling</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb34"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb34-1"><a href="#cb34-1"></a>all_results <span class="op">=</span> {}</span>
+<span id="cb34-2"><a href="#cb34-2"></a></span>
+<span id="cb34-3"><a href="#cb34-3"></a><span class="cf">for</span> seller_id <span class="kw">in</span> random_sellers:</span>
+<span id="cb34-4"><a href="#cb34-4"></a>    schedule <span class="op">=</span> create_scheduling_table(seller_id, order_items, orders)</span>
+<span id="cb34-5"><a href="#cb34-5"></a></span>
+<span id="cb34-6"><a href="#cb34-6"></a>    _, fcfs_metrics <span class="op">=</span> simulate_schedule_and_metrics(FCFS(schedule))</span>
+<span id="cb34-7"><a href="#cb34-7"></a>    _, spt_metrics  <span class="op">=</span> simulate_schedule_and_metrics(SPT(schedule))</span>
+<span id="cb34-8"><a href="#cb34-8"></a>    _, edd_metrics  <span class="op">=</span> simulate_schedule_and_metrics(EDD(schedule))</span>
+<span id="cb34-9"><a href="#cb34-9"></a></span>
+<span id="cb34-10"><a href="#cb34-10"></a>    results_df <span class="op">=</span> pd.DataFrame({</span>
+<span id="cb34-11"><a href="#cb34-11"></a>        <span class="st">"Metric"</span>: <span class="bu">list</span>(fcfs_metrics.keys()),</span>
+<span id="cb34-12"><a href="#cb34-12"></a>        <span class="st">"FCFS"</span>: <span class="bu">list</span>(fcfs_metrics.values()),</span>
+<span id="cb34-13"><a href="#cb34-13"></a>        <span class="st">"SPT"</span>: <span class="bu">list</span>(spt_metrics.values()),</span>
+<span id="cb34-14"><a href="#cb34-14"></a>        <span class="st">"EDD"</span>: <span class="bu">list</span>(edd_metrics.values())</span>
+<span id="cb34-15"><a href="#cb34-15"></a>    })</span>
+<span id="cb34-16"><a href="#cb34-16"></a></span>
+<span id="cb34-17"><a href="#cb34-17"></a>    results_df[[<span class="st">"FCFS"</span>, <span class="st">"SPT"</span>, <span class="st">"EDD"</span>]] <span class="op">=</span> results_df[[<span class="st">"FCFS"</span>, <span class="st">"SPT"</span>, <span class="st">"EDD"</span>]].<span class="bu">round</span>(<span class="dv">2</span>)</span>
+<span id="cb34-18"><a href="#cb34-18"></a></span>
+<span id="cb34-19"><a href="#cb34-19"></a>    all_results[seller_id] <span class="op">=</span> results_df</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+</div>
+<div id="7a0474b8" class="cell" data-execution_count="26">
+<details class="code-fold">
+<summary>results</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb35"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb35-1"><a href="#cb35-1"></a>metrics_order <span class="op">=</span> [</span>
+<span id="cb35-2"><a href="#cb35-2"></a>    <span class="st">"Average waiting time"</span>,</span>
+<span id="cb35-3"><a href="#cb35-3"></a>    <span class="st">"Average tardiness"</span>,</span>
+<span id="cb35-4"><a href="#cb35-4"></a>    <span class="st">"Maximum tardiness"</span>,</span>
+<span id="cb35-5"><a href="#cb35-5"></a>    <span class="st">"Late job percentage"</span>,</span>
+<span id="cb35-6"><a href="#cb35-6"></a>    <span class="st">"Makespan (days)"</span></span>
+<span id="cb35-7"><a href="#cb35-7"></a>]</span>
+<span id="cb35-8"><a href="#cb35-8"></a></span>
+<span id="cb35-9"><a href="#cb35-9"></a>colors <span class="op">=</span> {</span>
+<span id="cb35-10"><a href="#cb35-10"></a>    <span class="st">"FCFS"</span>: <span class="st">"#636EFA"</span>,</span>
+<span id="cb35-11"><a href="#cb35-11"></a>    <span class="st">"SPT"</span>: <span class="st">"#EF553B"</span>,</span>
+<span id="cb35-12"><a href="#cb35-12"></a>    <span class="st">"EDD"</span>: <span class="st">"#00CC96"</span></span>
+<span id="cb35-13"><a href="#cb35-13"></a>}</span>
+<span id="cb35-14"><a href="#cb35-14"></a></span>
+<span id="cb35-15"><a href="#cb35-15"></a><span class="cf">for</span> seller_id, df <span class="kw">in</span> all_results.items():</span>
+<span id="cb35-16"><a href="#cb35-16"></a>    <span class="bu">print</span>(<span class="ss">f"</span><span class="ch">\n</span><span class="ss">Metrics for Seller </span><span class="sc">{</span>seller_id<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb35-17"><a href="#cb35-17"></a>    display(df)</span>
+<span id="cb35-18"><a href="#cb35-18"></a></span>
+<span id="cb35-19"><a href="#cb35-19"></a>    fig <span class="op">=</span> make_subplots(</span>
+<span id="cb35-20"><a href="#cb35-20"></a>        rows<span class="op">=</span><span class="dv">1</span>,</span>
+<span id="cb35-21"><a href="#cb35-21"></a>        cols<span class="op">=</span><span class="dv">5</span>,</span>
+<span id="cb35-22"><a href="#cb35-22"></a>        horizontal_spacing<span class="op">=</span><span class="fl">0.08</span></span>
+<span id="cb35-23"><a href="#cb35-23"></a>    )</span>
+<span id="cb35-24"><a href="#cb35-24"></a></span>
+<span id="cb35-25"><a href="#cb35-25"></a>    <span class="cf">for</span> col, metric <span class="kw">in</span> <span class="bu">enumerate</span>(metrics_order, start<span class="op">=</span><span class="dv">1</span>):</span>
+<span id="cb35-26"><a href="#cb35-26"></a>        row <span class="op">=</span> df[df[<span class="st">"Metric"</span>] <span class="op">==</span> metric].iloc[<span class="dv">0</span>]</span>
+<span id="cb35-27"><a href="#cb35-27"></a></span>
+<span id="cb35-28"><a href="#cb35-28"></a>        <span class="cf">for</span> method <span class="kw">in</span> [<span class="st">"FCFS"</span>, <span class="st">"SPT"</span>, <span class="st">"EDD"</span>]:</span>
+<span id="cb35-29"><a href="#cb35-29"></a>            fig.add_trace(</span>
+<span id="cb35-30"><a href="#cb35-30"></a>                go.Bar(</span>
+<span id="cb35-31"><a href="#cb35-31"></a>                    x<span class="op">=</span>[method],</span>
+<span id="cb35-32"><a href="#cb35-32"></a>                    y<span class="op">=</span>[row[method]],</span>
+<span id="cb35-33"><a href="#cb35-33"></a>                    name<span class="op">=</span>method,</span>
+<span id="cb35-34"><a href="#cb35-34"></a>                    marker_color<span class="op">=</span>colors[method],</span>
+<span id="cb35-35"><a href="#cb35-35"></a>                    showlegend<span class="op">=</span>(col <span class="op">==</span> <span class="dv">1</span>),</span>
+<span id="cb35-36"><a href="#cb35-36"></a>                    hovertemplate<span class="op">=</span>(</span>
+<span id="cb35-37"><a href="#cb35-37"></a>                        <span class="ss">f"&lt;b&gt;</span><span class="sc">{</span>metric<span class="sc">}</span><span class="ss">&lt;/b&gt;&lt;br&gt;"</span></span>
+<span id="cb35-38"><a href="#cb35-38"></a>                        <span class="ss">f"Method: </span><span class="sc">{</span>method<span class="sc">}</span><span class="ss">&lt;br&gt;"</span></span>
+<span id="cb35-39"><a href="#cb35-39"></a>                        <span class="st">"Value: %</span><span class="sc">{y:.2f}</span><span class="st">&lt;extra&gt;&lt;/extra&gt;"</span></span>
+<span id="cb35-40"><a href="#cb35-40"></a>                    )</span>
+<span id="cb35-41"><a href="#cb35-41"></a>                ),</span>
+<span id="cb35-42"><a href="#cb35-42"></a>                row<span class="op">=</span><span class="dv">1</span>,</span>
+<span id="cb35-43"><a href="#cb35-43"></a>                col<span class="op">=</span>col</span>
+<span id="cb35-44"><a href="#cb35-44"></a>            )</span>
+<span id="cb35-45"><a href="#cb35-45"></a></span>
+<span id="cb35-46"><a href="#cb35-46"></a>        fig.add_annotation(</span>
+<span id="cb35-47"><a href="#cb35-47"></a>            text<span class="op">=</span><span class="ss">f"&lt;b&gt;</span><span class="sc">{</span>metric<span class="sc">}</span><span class="ss">&lt;/b&gt;"</span>,</span>
+<span id="cb35-48"><a href="#cb35-48"></a>            xref<span class="op">=</span><span class="st">"x domain"</span>,</span>
+<span id="cb35-49"><a href="#cb35-49"></a>            yref<span class="op">=</span><span class="st">"paper"</span>,</span>
+<span id="cb35-50"><a href="#cb35-50"></a>            x<span class="op">=</span><span class="fl">0.5</span>,</span>
+<span id="cb35-51"><a href="#cb35-51"></a>            y<span class="op">=</span><span class="fl">1.00</span>,</span>
+<span id="cb35-52"><a href="#cb35-52"></a>            showarrow<span class="op">=</span><span class="va">False</span>,</span>
+<span id="cb35-53"><a href="#cb35-53"></a>            font<span class="op">=</span><span class="bu">dict</span>(size<span class="op">=</span><span class="dv">14</span>),</span>
+<span id="cb35-54"><a href="#cb35-54"></a>            row<span class="op">=</span><span class="dv">1</span>,</span>
+<span id="cb35-55"><a href="#cb35-55"></a>            col<span class="op">=</span>col</span>
+<span id="cb35-56"><a href="#cb35-56"></a>        )</span>
+<span id="cb35-57"><a href="#cb35-57"></a></span>
+<span id="cb35-58"><a href="#cb35-58"></a>    fig.update_layout(</span>
+<span id="cb35-59"><a href="#cb35-59"></a>        title<span class="op">=</span><span class="bu">dict</span>(</span>
+<span id="cb35-60"><a href="#cb35-60"></a>            text<span class="op">=</span><span class="ss">f"Scheduling Performance Comparison — Seller </span><span class="sc">{</span>seller_id<span class="sc">}</span><span class="ss">"</span>,</span>
+<span id="cb35-61"><a href="#cb35-61"></a>            x<span class="op">=</span><span class="fl">0.5</span>,</span>
+<span id="cb35-62"><a href="#cb35-62"></a>            y<span class="op">=</span><span class="fl">0.8</span>,</span>
+<span id="cb35-63"><a href="#cb35-63"></a>            xanchor<span class="op">=</span><span class="st">"center"</span>,</span>
+<span id="cb35-64"><a href="#cb35-64"></a>            yanchor<span class="op">=</span><span class="st">"top"</span>,</span>
+<span id="cb35-65"><a href="#cb35-65"></a>            font<span class="op">=</span><span class="bu">dict</span>(size<span class="op">=</span><span class="dv">20</span>)</span>
+<span id="cb35-66"><a href="#cb35-66"></a>        ),</span>
+<span id="cb35-67"><a href="#cb35-67"></a>        height<span class="op">=</span><span class="dv">500</span>,</span>
+<span id="cb35-68"><a href="#cb35-68"></a>        width<span class="op">=</span><span class="dv">1500</span>,</span>
+<span id="cb35-69"><a href="#cb35-69"></a>        barmode<span class="op">=</span><span class="st">"group"</span>,</span>
+<span id="cb35-70"><a href="#cb35-70"></a>        template<span class="op">=</span><span class="st">"plotly_white"</span>,</span>
+<span id="cb35-71"><a href="#cb35-71"></a>        margin<span class="op">=</span><span class="bu">dict</span>(t<span class="op">=</span><span class="dv">130</span>, b<span class="op">=</span><span class="dv">80</span>, l<span class="op">=</span><span class="dv">50</span>, r<span class="op">=</span><span class="dv">50</span>),</span>
+<span id="cb35-72"><a href="#cb35-72"></a>        legend<span class="op">=</span><span class="bu">dict</span>(</span>
+<span id="cb35-73"><a href="#cb35-73"></a>            orientation<span class="op">=</span><span class="st">"h"</span>,</span>
+<span id="cb35-74"><a href="#cb35-74"></a>            yanchor<span class="op">=</span><span class="st">"bottom"</span>,</span>
+<span id="cb35-75"><a href="#cb35-75"></a>            y<span class="op">=-</span><span class="fl">0.25</span>,</span>
+<span id="cb35-76"><a href="#cb35-76"></a>            xanchor<span class="op">=</span><span class="st">"center"</span>,</span>
+<span id="cb35-77"><a href="#cb35-77"></a>            x<span class="op">=</span><span class="fl">0.5</span></span>
+<span id="cb35-78"><a href="#cb35-78"></a>        )</span>
+<span id="cb35-79"><a href="#cb35-79"></a>    )</span>
+<span id="cb35-80"><a href="#cb35-80"></a></span>
+<span id="cb35-81"><a href="#cb35-81"></a>    fig.update_xaxes(showgrid<span class="op">=</span><span class="va">False</span>, tickfont<span class="op">=</span><span class="bu">dict</span>(size<span class="op">=</span><span class="dv">11</span>))</span>
+<span id="cb35-82"><a href="#cb35-82"></a>    fig.update_yaxes(gridcolor<span class="op">=</span><span class="st">"rgba(0,0,0,0.05)"</span>, tickfont<span class="op">=</span><span class="bu">dict</span>(size<span class="op">=</span><span class="dv">11</span>))</span>
+<span id="cb35-83"><a href="#cb35-83"></a></span>
+<span id="cb35-84"><a href="#cb35-84"></a>    fig.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Metrics for Seller 6560211a19b47992c3666cc44a7e94c0</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<div>
+
+
+<table class="dataframe caption-top table table-sm table-striped small" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">Metric</th>
+<th data-quarto-table-cell-role="th">FCFS</th>
+<th data-quarto-table-cell-role="th">SPT</th>
+<th data-quarto-table-cell-role="th">EDD</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">0</th>
+<td>Average waiting time</td>
+<td>687.69</td>
+<td>1138.14</td>
+<td>693.19</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">1</th>
+<td>Average tardiness</td>
+<td>669.06</td>
+<td>1119.05</td>
+<td>674.73</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">2</th>
+<td>Maximum tardiness</td>
+<td>1479.00</td>
+<td>2490.00</td>
+<td>1466.00</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">3</th>
+<td>Late job percentage</td>
+<td>97.30</td>
+<td>99.78</td>
+<td>97.79</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">4</th>
+<td>Makespan (days)</td>
+<td>2040.00</td>
+<td>2578.00</td>
+<td>2045.00</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+<div class="cell-output cell-output-display">
+<div>                            <div id="632392a4-2dd1-4e6d-9bb6-2deb938b07c5" class="plotly-graph-div" style="height:500px; width:1500px;"></div>            <script type="text/javascript">                require(["plotly"], function(Plotly) {                    window.PLOTLYENV=window.PLOTLYENV || {};                                    if (document.getElementById("632392a4-2dd1-4e6d-9bb6-2deb938b07c5")) {                    Plotly.newPlot(                        "632392a4-2dd1-4e6d-9bb6-2deb938b07c5",                        [{"hovertemplate":"\u003cb\u003eAverage waiting time\u003c\u002fb\u003e\u003cbr\u003eMethod: FCFS\u003cbr\u003eValue: %{y:.2f}\u003cextra\u003e\u003c\u002fextra\u003e","marker":{"color":"#636EFA"},"name":"FCFS","showlegend":true,"x":["FCFS"],"y":[687.69],"type":"bar","xaxis":"x","yaxis":"y"},{"hovertemplate":"\u003cb\u003eAverage waiting time\u003c\u002fb\u003e\u003cbr\u003eMethod: SPT\u003cbr\u003eValue: %{y:.2f}\u003cextra\u003e\u003c\u002fextra\u003e","marker":{"color":"#EF553B"},"name":"SPT","showlegend":true,"x":["SPT"],"y":[1138.14],"type":"bar","xaxis":"x","yaxis":"y"},{"hovertemplate":"\u003cb\u003eAverage waiting time\u003c\u002fb\u003e\u003cbr\u003eMethod: EDD\u003cbr\u003eValue: %{y:.2f}\u003cextra\u003e\u003c\u002fextra\u003e","marker":{"color":"#00CC96"},"name":"EDD","showlegend":true,"x":["EDD"],"y":[693.19],"type":"bar","xaxis":"x","yaxis":"y"},{"hovertemplate":"\u003cb\u003eAverage tardiness\u003c\u002fb\u003e\u003cbr\u003eMethod: FCFS\u003cbr\u003eValue: %{y:.2f}\u003cextra\u003e\u003c\u002fextra\u003e","marker":{"color":"#636EFA"},"name":"FCFS","showlegend":false,"x":["FCFS"],"y":[669.06],"type":"bar","xaxis":"x2","yaxis":"y2"},{"hovertemplate":"\u003cb\u003eAverage tardiness\u003c\u002fb\u003e\u003cbr\u003eMethod: SPT\u003cbr\u003eValue: %{y:.2f}\u003cextra\u003e\u003c\u002fextra\u003e","marker":{"color":"#EF553B"},"name":"SPT","showlegend":false,"x":["SPT"],"y":[1119.05],"type":"bar","xaxis":"x2","yaxis":"y2"},{"hovertemplate":"\u003cb\u003eAverage tardiness\u003c\u002fb\u003e\u003cbr\u003eMethod: EDD\u003cbr\u003eValue: %{y:.2f}\u003cextra\u003e\u003c\u002fextra\u003e","marker":{"color":"#00CC96"},"name":"EDD","showlegend":false,"x":["EDD"],"y":[674.73],"type":"bar","xaxis":"x2","yaxis":"y2"},{"hovertemplate":"\u003cb\u003eMaximum tardiness\u003c\u002fb\u003e\u003cbr\u003eMethod: FCFS\u003cbr\u003eValue: %{y:.2f}\u003cextra\u003e\u003c\u002fextra\u003e","marker":{"color":"#636EFA"},"name":"FCFS","showlegend":false,"x":["FCFS"],"y":[1479.0],"type":"bar","xaxis":"x3","yaxis":"y3"},{"hovertemplate":"\u003cb\u003eMaximum tardiness\u003c\u002fb\u003e\u003cbr\u003eMethod: SPT\u003cbr\u003eValue: %{y:.2f}\u003cextra\u003e\u003c\u002fextra\u003e","marker":{"color":"#EF553B"},"name":"SPT","showlegend":false,"x":["SPT"],"y":[2490.0],"type":"bar","xaxis":"x3","yaxis":"y3"},{"hovertemplate":"\u003cb\u003eMaximum tardiness\u003c\u002fb\u003e\u003cbr\u003eMethod: EDD\u003cbr\u003eValue: %{y:.2f}\u003cextra\u003e\u003c\u002fextra\u003e","marker":{"color":"#00CC96"},"name":"EDD","showlegend":false,"x":["EDD"],"y":[1466.0],"type":"bar","xaxis":"x3","yaxis":"y3"},{"hovertemplate":"\u003cb\u003eLate job percentage\u003c\u002fb\u003e\u003cbr\u003eMethod: FCFS\u003cbr\u003eValue: %{y:.2f}\u003cextra\u003e\u003c\u002fextra\u003e","marker":{"color":"#636EFA"},"name":"FCFS","showlegend":false,"x":["FCFS"],"y":[97.3],"type":"bar","xaxis":"x4","yaxis":"y4"},{"hovertemplate":"\u003cb\u003eLate job percentage\u003c\u002fb\u003e\u003cbr\u003eMethod: SPT\u003cbr\u003eValue: %{y:.2f}\u003cextra\u003e\u003c\u002fextra\u003e","marker":{"color":"#EF553B"},"name":"SPT","showlegend":false,"x":["SPT"],"y":[99.78],"type":"bar","xaxis":"x4","yaxis":"y4"},{"hovertemplate":"\u003cb\u003eLate job percentage\u003c\u002fb\u003e\u003cbr\u003eMethod: EDD\u003cbr\u003eValue: %{y:.2f}\u003cextra\u003e\u003c\u002fextra\u003e","marker":{"color":"#00CC96"},"name":"EDD","showlegend":false,"x":["EDD"],"y":[97.79],"type":"bar","xaxis":"x4","yaxis":"y4"},{"hovertemplate":"\u003cb\u003eMakespan (days)\u003c\u002fb\u003e\u003cbr\u003eMethod: FCFS\u003cbr\u003eValue: %{y:.2f}\u003cextra\u003e\u003c\u002fextra\u003e","marker":{"color":"#636EFA"},"name":"FCFS","showlegend":false,"x":["FCFS"],"y":[2040.0],"type":"bar","xaxis":"x5","yaxis":"y5"},{"hovertemplate":"\u003cb\u003eMakespan (days)\u003c\u002fb\u003e\u003cbr\u003eMethod: SPT\u003cbr\u003eValue: %{y:.2f}\u003cextra\u003e\u003c\u002fextra\u003e","marker":{"color":"#EF553B"},"name":"SPT","showlegend":false,"x":["SPT"],"y":[2578.0],"type":"bar","xaxis":"x5","yaxis":"y5"},{"hovertemplate":"\u003cb\u003eMakespan (days)\u003c\u002fb\u003e\u003cbr\u003eMethod: EDD\u003cbr\u003eValue: %{y:.2f}\u003cextra\u003e\u003c\u002fextra\u003e","marker":{"color":"#00CC96"},"name":"EDD","showlegend":false,"x":["EDD"],"y":[2045.0],"type":"bar","xaxis":"x5","yaxis":"y5"}],                        {"template":{"data":{"barpolar":[{"marker":{"line":{"color":"white","width":0.5},"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"barpolar"}],"bar":[{"error_x":{"color":"#2a3f5f"},"error_y":{"color":"#2a3f5f"},"marker":{"line":{"color":"white","width":0.5},"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"bar"}],"carpet":[{"aaxis":{"endlinecolor":"#2a3f5f","gridcolor":"#C8D4E3","linecolor":"#C8D4E3","minorgridcolor":"#C8D4E3","startlinecolor":"#2a3f5f"},"baxis":{"endlinecolor":"#2a3f5f","gridcolor":"#C8D4E3","linecolor":"#C8D4E3","minorgridcolor":"#C8D4E3","startlinecolor":"#2a3f5f"},"type":"carpet"}],"choropleth":[{"colorbar":{"outlinewidth":0,"ticks":""},"type":"choropleth"}],"contourcarpet":[{"colorbar":{"outlinewidth":0,"ticks":""},"type":"contourcarpet"}],"contour":[{"colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"type":"contour"}],"heatmapgl":[{"colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"type":"heatmapgl"}],"heatmap":[{"colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"type":"heatmap"}],"histogram2dcontour":[{"colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"type":"histogram2dcontour"}],"histogram2d":[{"colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"type":"histogram2d"}],"histogram":[{"marker":{"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"histogram"}],"mesh3d":[{"colorbar":{"outlinewidth":0,"ticks":""},"type":"mesh3d"}],"parcoords":[{"line":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"parcoords"}],"pie":[{"automargin":true,"type":"pie"}],"scatter3d":[{"line":{"colorbar":{"outlinewidth":0,"ticks":""}},"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scatter3d"}],"scattercarpet":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scattercarpet"}],"scattergeo":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scattergeo"}],"scattergl":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scattergl"}],"scattermapbox":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scattermapbox"}],"scatterpolargl":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scatterpolargl"}],"scatterpolar":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scatterpolar"}],"scatter":[{"fillpattern":{"fillmode":"overlay","size":10,"solidity":0.2},"type":"scatter"}],"scatterternary":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scatterternary"}],"surface":[{"colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"type":"surface"}],"table":[{"cells":{"fill":{"color":"#EBF0F8"},"line":{"color":"white"}},"header":{"fill":{"color":"#C8D4E3"},"line":{"color":"white"}},"type":"table"}]},"layout":{"annotationdefaults":{"arrowcolor":"#2a3f5f","arrowhead":0,"arrowwidth":1},"autotypenumbers":"strict","coloraxis":{"colorbar":{"outlinewidth":0,"ticks":""}},"colorscale":{"diverging":[[0,"#8e0152"],[0.1,"#c51b7d"],[0.2,"#de77ae"],[0.3,"#f1b6da"],[0.4,"#fde0ef"],[0.5,"#f7f7f7"],[0.6,"#e6f5d0"],[0.7,"#b8e186"],[0.8,"#7fbc41"],[0.9,"#4d9221"],[1,"#276419"]],"sequential":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"sequentialminus":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]},"colorway":["#636efa","#EF553B","#00cc96","#ab63fa","#FFA15A","#19d3f3","#FF6692","#B6E880","#FF97FF","#FECB52"],"font":{"color":"#2a3f5f"},"geo":{"bgcolor":"white","lakecolor":"white","landcolor":"white","showlakes":true,"showland":true,"subunitcolor":"#C8D4E3"},"hoverlabel":{"align":"left"},"hovermode":"closest","mapbox":{"style":"light"},"margin":{"b":0,"l":0,"r":0,"t":30},"paper_bgcolor":"white","plot_bgcolor":"white","polar":{"angularaxis":{"gridcolor":"#EBF0F8","linecolor":"#EBF0F8","ticks":""},"bgcolor":"white","radialaxis":{"gridcolor":"#EBF0F8","linecolor":"#EBF0F8","ticks":""}},"scene":{"xaxis":{"backgroundcolor":"white","gridcolor":"#DFE8F3","gridwidth":2,"linecolor":"#EBF0F8","showbackground":true,"ticks":"","zerolinecolor":"#EBF0F8"},"yaxis":{"backgroundcolor":"white","gridcolor":"#DFE8F3","gridwidth":2,"linecolor":"#EBF0F8","showbackground":true,"ticks":"","zerolinecolor":"#EBF0F8"},"zaxis":{"backgroundcolor":"white","gridcolor":"#DFE8F3","gridwidth":2,"linecolor":"#EBF0F8","showbackground":true,"ticks":"","zerolinecolor":"#EBF0F8"}},"shapedefaults":{"line":{"color":"#2a3f5f"}},"ternary":{"aaxis":{"gridcolor":"#DFE8F3","linecolor":"#A2B1C6","ticks":""},"baxis":{"gridcolor":"#DFE8F3","linecolor":"#A2B1C6","ticks":""},"bgcolor":"white","caxis":{"gridcolor":"#DFE8F3","linecolor":"#A2B1C6","ticks":""}},"title":{"x":0.05},"xaxis":{"automargin":true,"gridcolor":"#EBF0F8","linecolor":"#EBF0F8","ticks":"","title":{"standoff":15},"zerolinecolor":"#EBF0F8","zerolinewidth":2},"yaxis":{"automargin":true,"gridcolor":"#EBF0F8","linecolor":"#EBF0F8","ticks":"","title":{"standoff":15},"zerolinecolor":"#EBF0F8","zerolinewidth":2}}},"xaxis":{"anchor":"y","domain":[0.0,0.13599999999999998],"tickfont":{"size":11},"showgrid":false},"yaxis":{"anchor":"x","domain":[0.0,1.0],"tickfont":{"size":11},"gridcolor":"rgba(0,0,0,0.05)"},"xaxis2":{"anchor":"y2","domain":[0.21599999999999997,0.352],"tickfont":{"size":11},"showgrid":false},"yaxis2":{"anchor":"x2","domain":[0.0,1.0],"tickfont":{"size":11},"gridcolor":"rgba(0,0,0,0.05)"},"xaxis3":{"anchor":"y3","domain":[0.43199999999999994,0.568],"tickfont":{"size":11},"showgrid":false},"yaxis3":{"anchor":"x3","domain":[0.0,1.0],"tickfont":{"size":11},"gridcolor":"rgba(0,0,0,0.05)"},"xaxis4":{"anchor":"y4","domain":[0.6479999999999999,0.7839999999999999],"tickfont":{"size":11},"showgrid":false},"yaxis4":{"anchor":"x4","domain":[0.0,1.0],"tickfont":{"size":11},"gridcolor":"rgba(0,0,0,0.05)"},"xaxis5":{"anchor":"y5","domain":[0.8639999999999999,0.9999999999999999],"tickfont":{"size":11},"showgrid":false},"yaxis5":{"anchor":"x5","domain":[0.0,1.0],"tickfont":{"size":11},"gridcolor":"rgba(0,0,0,0.05)"},"annotations":[{"font":{"size":14},"showarrow":false,"text":"\u003cb\u003eAverage waiting time\u003c\u002fb\u003e","x":0.5,"xref":"x domain","y":1.0,"yref":"y"},{"font":{"size":14},"showarrow":false,"text":"\u003cb\u003eAverage tardiness\u003c\u002fb\u003e","x":0.5,"xref":"x2 domain","y":1.0,"yref":"y2"},{"font":{"size":14},"showarrow":false,"text":"\u003cb\u003eMaximum tardiness\u003c\u002fb\u003e","x":0.5,"xref":"x3 domain","y":1.0,"yref":"y3"},{"font":{"size":14},"showarrow":false,"text":"\u003cb\u003eLate job percentage\u003c\u002fb\u003e","x":0.5,"xref":"x4 domain","y":1.0,"yref":"y4"},{"font":{"size":14},"showarrow":false,"text":"\u003cb\u003eMakespan (days)\u003c\u002fb\u003e","x":0.5,"xref":"x5 domain","y":1.0,"yref":"y5"}],"title":{"font":{"size":20},"text":"Scheduling Performance Comparison \u2014 Seller 6560211a19b47992c3666cc44a7e94c0","x":0.5,"y":0.8,"xanchor":"center","yanchor":"top"},"margin":{"t":130,"b":80,"l":50,"r":50},"legend":{"orientation":"h","yanchor":"bottom","y":-0.25,"xanchor":"center","x":0.5},"height":500,"width":1500,"barmode":"group"},                        {"responsive": true}                    ).then(function(){
+                            
+var gd = document.getElementById('632392a4-2dd1-4e6d-9bb6-2deb938b07c5');
+var x = new MutationObserver(function (mutations, observer) {{
+        var display = window.getComputedStyle(gd).display;
+        if (!display || display === 'none') {{
+            console.log([gd, 'removed!']);
+            Plotly.purge(gd);
+            observer.disconnect();
+        }}
+}});
+
+// Listen for the removal of the full notebook cells
+var notebookContainer = gd.closest('#notebook-container');
+if (notebookContainer) {{
+    x.observe(notebookContainer, {childList: true});
+}}
+
+// Listen for the clearing of the current output cell
+var outputEl = gd.closest('.output');
+if (outputEl) {{
+    x.observe(outputEl, {childList: true});
+}}
+
+                        })                };                });            </script>        </div>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Metrics for Seller 4a3ca9315b744ce9f8e9374361493884</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<div>
+
+
+<table class="dataframe caption-top table table-sm table-striped small" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">Metric</th>
+<th data-quarto-table-cell-role="th">FCFS</th>
+<th data-quarto-table-cell-role="th">SPT</th>
+<th data-quarto-table-cell-role="th">EDD</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">0</th>
+<td>Average waiting time</td>
+<td>699.30</td>
+<td>1162.85</td>
+<td>706.00</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">1</th>
+<td>Average tardiness</td>
+<td>678.42</td>
+<td>1140.82</td>
+<td>685.01</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">2</th>
+<td>Maximum tardiness</td>
+<td>1397.00</td>
+<td>2394.00</td>
+<td>1400.00</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">3</th>
+<td>Late job percentage</td>
+<td>96.40</td>
+<td>99.78</td>
+<td>96.95</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">4</th>
+<td>Makespan (days)</td>
+<td>2001.00</td>
+<td>2549.00</td>
+<td>2007.00</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+<div class="cell-output cell-output-display">
+<div>                            <div id="6afc61fd-4ea0-4c43-bca9-a79abe73b46f" class="plotly-graph-div" style="height:500px; width:1500px;"></div>            <script type="text/javascript">                require(["plotly"], function(Plotly) {                    window.PLOTLYENV=window.PLOTLYENV || {};                                    if (document.getElementById("6afc61fd-4ea0-4c43-bca9-a79abe73b46f")) {                    Plotly.newPlot(                        "6afc61fd-4ea0-4c43-bca9-a79abe73b46f",                        [{"hovertemplate":"\u003cb\u003eAverage waiting time\u003c\u002fb\u003e\u003cbr\u003eMethod: FCFS\u003cbr\u003eValue: %{y:.2f}\u003cextra\u003e\u003c\u002fextra\u003e","marker":{"color":"#636EFA"},"name":"FCFS","showlegend":true,"x":["FCFS"],"y":[699.3],"type":"bar","xaxis":"x","yaxis":"y"},{"hovertemplate":"\u003cb\u003eAverage waiting time\u003c\u002fb\u003e\u003cbr\u003eMethod: SPT\u003cbr\u003eValue: %{y:.2f}\u003cextra\u003e\u003c\u002fextra\u003e","marker":{"color":"#EF553B"},"name":"SPT","showlegend":true,"x":["SPT"],"y":[1162.85],"type":"bar","xaxis":"x","yaxis":"y"},{"hovertemplate":"\u003cb\u003eAverage waiting time\u003c\u002fb\u003e\u003cbr\u003eMethod: EDD\u003cbr\u003eValue: %{y:.2f}\u003cextra\u003e\u003c\u002fextra\u003e","marker":{"color":"#00CC96"},"name":"EDD","showlegend":true,"x":["EDD"],"y":[706.0],"type":"bar","xaxis":"x","yaxis":"y"},{"hovertemplate":"\u003cb\u003eAverage tardiness\u003c\u002fb\u003e\u003cbr\u003eMethod: FCFS\u003cbr\u003eValue: %{y:.2f}\u003cextra\u003e\u003c\u002fextra\u003e","marker":{"color":"#636EFA"},"name":"FCFS","showlegend":false,"x":["FCFS"],"y":[678.42],"type":"bar","xaxis":"x2","yaxis":"y2"},{"hovertemplate":"\u003cb\u003eAverage tardiness\u003c\u002fb\u003e\u003cbr\u003eMethod: SPT\u003cbr\u003eValue: %{y:.2f}\u003cextra\u003e\u003c\u002fextra\u003e","marker":{"color":"#EF553B"},"name":"SPT","showlegend":false,"x":["SPT"],"y":[1140.82],"type":"bar","xaxis":"x2","yaxis":"y2"},{"hovertemplate":"\u003cb\u003eAverage tardiness\u003c\u002fb\u003e\u003cbr\u003eMethod: EDD\u003cbr\u003eValue: %{y:.2f}\u003cextra\u003e\u003c\u002fextra\u003e","marker":{"color":"#00CC96"},"name":"EDD","showlegend":false,"x":["EDD"],"y":[685.01],"type":"bar","xaxis":"x2","yaxis":"y2"},{"hovertemplate":"\u003cb\u003eMaximum tardiness\u003c\u002fb\u003e\u003cbr\u003eMethod: FCFS\u003cbr\u003eValue: %{y:.2f}\u003cextra\u003e\u003c\u002fextra\u003e","marker":{"color":"#636EFA"},"name":"FCFS","showlegend":false,"x":["FCFS"],"y":[1397.0],"type":"bar","xaxis":"x3","yaxis":"y3"},{"hovertemplate":"\u003cb\u003eMaximum tardiness\u003c\u002fb\u003e\u003cbr\u003eMethod: SPT\u003cbr\u003eValue: %{y:.2f}\u003cextra\u003e\u003c\u002fextra\u003e","marker":{"color":"#EF553B"},"name":"SPT","showlegend":false,"x":["SPT"],"y":[2394.0],"type":"bar","xaxis":"x3","yaxis":"y3"},{"hovertemplate":"\u003cb\u003eMaximum tardiness\u003c\u002fb\u003e\u003cbr\u003eMethod: EDD\u003cbr\u003eValue: %{y:.2f}\u003cextra\u003e\u003c\u002fextra\u003e","marker":{"color":"#00CC96"},"name":"EDD","showlegend":false,"x":["EDD"],"y":[1400.0],"type":"bar","xaxis":"x3","yaxis":"y3"},{"hovertemplate":"\u003cb\u003eLate job percentage\u003c\u002fb\u003e\u003cbr\u003eMethod: FCFS\u003cbr\u003eValue: %{y:.2f}\u003cextra\u003e\u003c\u002fextra\u003e","marker":{"color":"#636EFA"},"name":"FCFS","showlegend":false,"x":["FCFS"],"y":[96.4],"type":"bar","xaxis":"x4","yaxis":"y4"},{"hovertemplate":"\u003cb\u003eLate job percentage\u003c\u002fb\u003e\u003cbr\u003eMethod: SPT\u003cbr\u003eValue: %{y:.2f}\u003cextra\u003e\u003c\u002fextra\u003e","marker":{"color":"#EF553B"},"name":"SPT","showlegend":false,"x":["SPT"],"y":[99.78],"type":"bar","xaxis":"x4","yaxis":"y4"},{"hovertemplate":"\u003cb\u003eLate job percentage\u003c\u002fb\u003e\u003cbr\u003eMethod: EDD\u003cbr\u003eValue: %{y:.2f}\u003cextra\u003e\u003c\u002fextra\u003e","marker":{"color":"#00CC96"},"name":"EDD","showlegend":false,"x":["EDD"],"y":[96.95],"type":"bar","xaxis":"x4","yaxis":"y4"},{"hovertemplate":"\u003cb\u003eMakespan (days)\u003c\u002fb\u003e\u003cbr\u003eMethod: FCFS\u003cbr\u003eValue: %{y:.2f}\u003cextra\u003e\u003c\u002fextra\u003e","marker":{"color":"#636EFA"},"name":"FCFS","showlegend":false,"x":["FCFS"],"y":[2001.0],"type":"bar","xaxis":"x5","yaxis":"y5"},{"hovertemplate":"\u003cb\u003eMakespan (days)\u003c\u002fb\u003e\u003cbr\u003eMethod: SPT\u003cbr\u003eValue: %{y:.2f}\u003cextra\u003e\u003c\u002fextra\u003e","marker":{"color":"#EF553B"},"name":"SPT","showlegend":false,"x":["SPT"],"y":[2549.0],"type":"bar","xaxis":"x5","yaxis":"y5"},{"hovertemplate":"\u003cb\u003eMakespan (days)\u003c\u002fb\u003e\u003cbr\u003eMethod: EDD\u003cbr\u003eValue: %{y:.2f}\u003cextra\u003e\u003c\u002fextra\u003e","marker":{"color":"#00CC96"},"name":"EDD","showlegend":false,"x":["EDD"],"y":[2007.0],"type":"bar","xaxis":"x5","yaxis":"y5"}],                        {"template":{"data":{"barpolar":[{"marker":{"line":{"color":"white","width":0.5},"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"barpolar"}],"bar":[{"error_x":{"color":"#2a3f5f"},"error_y":{"color":"#2a3f5f"},"marker":{"line":{"color":"white","width":0.5},"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"bar"}],"carpet":[{"aaxis":{"endlinecolor":"#2a3f5f","gridcolor":"#C8D4E3","linecolor":"#C8D4E3","minorgridcolor":"#C8D4E3","startlinecolor":"#2a3f5f"},"baxis":{"endlinecolor":"#2a3f5f","gridcolor":"#C8D4E3","linecolor":"#C8D4E3","minorgridcolor":"#C8D4E3","startlinecolor":"#2a3f5f"},"type":"carpet"}],"choropleth":[{"colorbar":{"outlinewidth":0,"ticks":""},"type":"choropleth"}],"contourcarpet":[{"colorbar":{"outlinewidth":0,"ticks":""},"type":"contourcarpet"}],"contour":[{"colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"type":"contour"}],"heatmapgl":[{"colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"type":"heatmapgl"}],"heatmap":[{"colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"type":"heatmap"}],"histogram2dcontour":[{"colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"type":"histogram2dcontour"}],"histogram2d":[{"colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"type":"histogram2d"}],"histogram":[{"marker":{"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"histogram"}],"mesh3d":[{"colorbar":{"outlinewidth":0,"ticks":""},"type":"mesh3d"}],"parcoords":[{"line":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"parcoords"}],"pie":[{"automargin":true,"type":"pie"}],"scatter3d":[{"line":{"colorbar":{"outlinewidth":0,"ticks":""}},"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scatter3d"}],"scattercarpet":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scattercarpet"}],"scattergeo":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scattergeo"}],"scattergl":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scattergl"}],"scattermapbox":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scattermapbox"}],"scatterpolargl":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scatterpolargl"}],"scatterpolar":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scatterpolar"}],"scatter":[{"fillpattern":{"fillmode":"overlay","size":10,"solidity":0.2},"type":"scatter"}],"scatterternary":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scatterternary"}],"surface":[{"colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"type":"surface"}],"table":[{"cells":{"fill":{"color":"#EBF0F8"},"line":{"color":"white"}},"header":{"fill":{"color":"#C8D4E3"},"line":{"color":"white"}},"type":"table"}]},"layout":{"annotationdefaults":{"arrowcolor":"#2a3f5f","arrowhead":0,"arrowwidth":1},"autotypenumbers":"strict","coloraxis":{"colorbar":{"outlinewidth":0,"ticks":""}},"colorscale":{"diverging":[[0,"#8e0152"],[0.1,"#c51b7d"],[0.2,"#de77ae"],[0.3,"#f1b6da"],[0.4,"#fde0ef"],[0.5,"#f7f7f7"],[0.6,"#e6f5d0"],[0.7,"#b8e186"],[0.8,"#7fbc41"],[0.9,"#4d9221"],[1,"#276419"]],"sequential":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"sequentialminus":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]},"colorway":["#636efa","#EF553B","#00cc96","#ab63fa","#FFA15A","#19d3f3","#FF6692","#B6E880","#FF97FF","#FECB52"],"font":{"color":"#2a3f5f"},"geo":{"bgcolor":"white","lakecolor":"white","landcolor":"white","showlakes":true,"showland":true,"subunitcolor":"#C8D4E3"},"hoverlabel":{"align":"left"},"hovermode":"closest","mapbox":{"style":"light"},"margin":{"b":0,"l":0,"r":0,"t":30},"paper_bgcolor":"white","plot_bgcolor":"white","polar":{"angularaxis":{"gridcolor":"#EBF0F8","linecolor":"#EBF0F8","ticks":""},"bgcolor":"white","radialaxis":{"gridcolor":"#EBF0F8","linecolor":"#EBF0F8","ticks":""}},"scene":{"xaxis":{"backgroundcolor":"white","gridcolor":"#DFE8F3","gridwidth":2,"linecolor":"#EBF0F8","showbackground":true,"ticks":"","zerolinecolor":"#EBF0F8"},"yaxis":{"backgroundcolor":"white","gridcolor":"#DFE8F3","gridwidth":2,"linecolor":"#EBF0F8","showbackground":true,"ticks":"","zerolinecolor":"#EBF0F8"},"zaxis":{"backgroundcolor":"white","gridcolor":"#DFE8F3","gridwidth":2,"linecolor":"#EBF0F8","showbackground":true,"ticks":"","zerolinecolor":"#EBF0F8"}},"shapedefaults":{"line":{"color":"#2a3f5f"}},"ternary":{"aaxis":{"gridcolor":"#DFE8F3","linecolor":"#A2B1C6","ticks":""},"baxis":{"gridcolor":"#DFE8F3","linecolor":"#A2B1C6","ticks":""},"bgcolor":"white","caxis":{"gridcolor":"#DFE8F3","linecolor":"#A2B1C6","ticks":""}},"title":{"x":0.05},"xaxis":{"automargin":true,"gridcolor":"#EBF0F8","linecolor":"#EBF0F8","ticks":"","title":{"standoff":15},"zerolinecolor":"#EBF0F8","zerolinewidth":2},"yaxis":{"automargin":true,"gridcolor":"#EBF0F8","linecolor":"#EBF0F8","ticks":"","title":{"standoff":15},"zerolinecolor":"#EBF0F8","zerolinewidth":2}}},"xaxis":{"anchor":"y","domain":[0.0,0.13599999999999998],"tickfont":{"size":11},"showgrid":false},"yaxis":{"anchor":"x","domain":[0.0,1.0],"tickfont":{"size":11},"gridcolor":"rgba(0,0,0,0.05)"},"xaxis2":{"anchor":"y2","domain":[0.21599999999999997,0.352],"tickfont":{"size":11},"showgrid":false},"yaxis2":{"anchor":"x2","domain":[0.0,1.0],"tickfont":{"size":11},"gridcolor":"rgba(0,0,0,0.05)"},"xaxis3":{"anchor":"y3","domain":[0.43199999999999994,0.568],"tickfont":{"size":11},"showgrid":false},"yaxis3":{"anchor":"x3","domain":[0.0,1.0],"tickfont":{"size":11},"gridcolor":"rgba(0,0,0,0.05)"},"xaxis4":{"anchor":"y4","domain":[0.6479999999999999,0.7839999999999999],"tickfont":{"size":11},"showgrid":false},"yaxis4":{"anchor":"x4","domain":[0.0,1.0],"tickfont":{"size":11},"gridcolor":"rgba(0,0,0,0.05)"},"xaxis5":{"anchor":"y5","domain":[0.8639999999999999,0.9999999999999999],"tickfont":{"size":11},"showgrid":false},"yaxis5":{"anchor":"x5","domain":[0.0,1.0],"tickfont":{"size":11},"gridcolor":"rgba(0,0,0,0.05)"},"annotations":[{"font":{"size":14},"showarrow":false,"text":"\u003cb\u003eAverage waiting time\u003c\u002fb\u003e","x":0.5,"xref":"x domain","y":1.0,"yref":"y"},{"font":{"size":14},"showarrow":false,"text":"\u003cb\u003eAverage tardiness\u003c\u002fb\u003e","x":0.5,"xref":"x2 domain","y":1.0,"yref":"y2"},{"font":{"size":14},"showarrow":false,"text":"\u003cb\u003eMaximum tardiness\u003c\u002fb\u003e","x":0.5,"xref":"x3 domain","y":1.0,"yref":"y3"},{"font":{"size":14},"showarrow":false,"text":"\u003cb\u003eLate job percentage\u003c\u002fb\u003e","x":0.5,"xref":"x4 domain","y":1.0,"yref":"y4"},{"font":{"size":14},"showarrow":false,"text":"\u003cb\u003eMakespan (days)\u003c\u002fb\u003e","x":0.5,"xref":"x5 domain","y":1.0,"yref":"y5"}],"title":{"font":{"size":20},"text":"Scheduling Performance Comparison \u2014 Seller 4a3ca9315b744ce9f8e9374361493884","x":0.5,"y":0.8,"xanchor":"center","yanchor":"top"},"margin":{"t":130,"b":80,"l":50,"r":50},"legend":{"orientation":"h","yanchor":"bottom","y":-0.25,"xanchor":"center","x":0.5},"height":500,"width":1500,"barmode":"group"},                        {"responsive": true}                    ).then(function(){
+                            
+var gd = document.getElementById('6afc61fd-4ea0-4c43-bca9-a79abe73b46f');
+var x = new MutationObserver(function (mutations, observer) {{
+        var display = window.getComputedStyle(gd).display;
+        if (!display || display === 'none') {{
+            console.log([gd, 'removed!']);
+            Plotly.purge(gd);
+            observer.disconnect();
+        }}
+}});
+
+// Listen for the removal of the full notebook cells
+var notebookContainer = gd.closest('#notebook-container');
+if (notebookContainer) {{
+    x.observe(notebookContainer, {childList: true});
+}}
+
+// Listen for the clearing of the current output cell
+var outputEl = gd.closest('.output');
+if (outputEl) {{
+    x.observe(outputEl, {childList: true});
+}}
+
+                        })                };                });            </script>        </div>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Metrics for Seller 1f50f920176fa81dab994f9023523100</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<div>
+
+
+<table class="dataframe caption-top table table-sm table-striped small" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">Metric</th>
+<th data-quarto-table-cell-role="th">FCFS</th>
+<th data-quarto-table-cell-role="th">SPT</th>
+<th data-quarto-table-cell-role="th">EDD</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">0</th>
+<td>Average waiting time</td>
+<td>749.03</td>
+<td>945.21</td>
+<td>751.87</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">1</th>
+<td>Average tardiness</td>
+<td>726.42</td>
+<td>922.12</td>
+<td>728.72</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">2</th>
+<td>Maximum tardiness</td>
+<td>1479.00</td>
+<td>2219.00</td>
+<td>1476.00</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">3</th>
+<td>Late job percentage</td>
+<td>96.15</td>
+<td>99.29</td>
+<td>96.51</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">4</th>
+<td>Makespan (days)</td>
+<td>1996.00</td>
+<td>2400.00</td>
+<td>1999.00</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+<div class="cell-output cell-output-display">
+<div>                            <div id="80b4a195-6898-4b0c-bc18-c11ec9deef7b" class="plotly-graph-div" style="height:500px; width:1500px;"></div>            <script type="text/javascript">                require(["plotly"], function(Plotly) {                    window.PLOTLYENV=window.PLOTLYENV || {};                                    if (document.getElementById("80b4a195-6898-4b0c-bc18-c11ec9deef7b")) {                    Plotly.newPlot(                        "80b4a195-6898-4b0c-bc18-c11ec9deef7b",                        [{"hovertemplate":"\u003cb\u003eAverage waiting time\u003c\u002fb\u003e\u003cbr\u003eMethod: FCFS\u003cbr\u003eValue: %{y:.2f}\u003cextra\u003e\u003c\u002fextra\u003e","marker":{"color":"#636EFA"},"name":"FCFS","showlegend":true,"x":["FCFS"],"y":[749.03],"type":"bar","xaxis":"x","yaxis":"y"},{"hovertemplate":"\u003cb\u003eAverage waiting time\u003c\u002fb\u003e\u003cbr\u003eMethod: SPT\u003cbr\u003eValue: %{y:.2f}\u003cextra\u003e\u003c\u002fextra\u003e","marker":{"color":"#EF553B"},"name":"SPT","showlegend":true,"x":["SPT"],"y":[945.21],"type":"bar","xaxis":"x","yaxis":"y"},{"hovertemplate":"\u003cb\u003eAverage waiting time\u003c\u002fb\u003e\u003cbr\u003eMethod: EDD\u003cbr\u003eValue: %{y:.2f}\u003cextra\u003e\u003c\u002fextra\u003e","marker":{"color":"#00CC96"},"name":"EDD","showlegend":true,"x":["EDD"],"y":[751.87],"type":"bar","xaxis":"x","yaxis":"y"},{"hovertemplate":"\u003cb\u003eAverage tardiness\u003c\u002fb\u003e\u003cbr\u003eMethod: FCFS\u003cbr\u003eValue: %{y:.2f}\u003cextra\u003e\u003c\u002fextra\u003e","marker":{"color":"#636EFA"},"name":"FCFS","showlegend":false,"x":["FCFS"],"y":[726.42],"type":"bar","xaxis":"x2","yaxis":"y2"},{"hovertemplate":"\u003cb\u003eAverage tardiness\u003c\u002fb\u003e\u003cbr\u003eMethod: SPT\u003cbr\u003eValue: %{y:.2f}\u003cextra\u003e\u003c\u002fextra\u003e","marker":{"color":"#EF553B"},"name":"SPT","showlegend":false,"x":["SPT"],"y":[922.12],"type":"bar","xaxis":"x2","yaxis":"y2"},{"hovertemplate":"\u003cb\u003eAverage tardiness\u003c\u002fb\u003e\u003cbr\u003eMethod: EDD\u003cbr\u003eValue: %{y:.2f}\u003cextra\u003e\u003c\u002fextra\u003e","marker":{"color":"#00CC96"},"name":"EDD","showlegend":false,"x":["EDD"],"y":[728.72],"type":"bar","xaxis":"x2","yaxis":"y2"},{"hovertemplate":"\u003cb\u003eMaximum tardiness\u003c\u002fb\u003e\u003cbr\u003eMethod: FCFS\u003cbr\u003eValue: %{y:.2f}\u003cextra\u003e\u003c\u002fextra\u003e","marker":{"color":"#636EFA"},"name":"FCFS","showlegend":false,"x":["FCFS"],"y":[1479.0],"type":"bar","xaxis":"x3","yaxis":"y3"},{"hovertemplate":"\u003cb\u003eMaximum tardiness\u003c\u002fb\u003e\u003cbr\u003eMethod: SPT\u003cbr\u003eValue: %{y:.2f}\u003cextra\u003e\u003c\u002fextra\u003e","marker":{"color":"#EF553B"},"name":"SPT","showlegend":false,"x":["SPT"],"y":[2219.0],"type":"bar","xaxis":"x3","yaxis":"y3"},{"hovertemplate":"\u003cb\u003eMaximum tardiness\u003c\u002fb\u003e\u003cbr\u003eMethod: EDD\u003cbr\u003eValue: %{y:.2f}\u003cextra\u003e\u003c\u002fextra\u003e","marker":{"color":"#00CC96"},"name":"EDD","showlegend":false,"x":["EDD"],"y":[1476.0],"type":"bar","xaxis":"x3","yaxis":"y3"},{"hovertemplate":"\u003cb\u003eLate job percentage\u003c\u002fb\u003e\u003cbr\u003eMethod: FCFS\u003cbr\u003eValue: %{y:.2f}\u003cextra\u003e\u003c\u002fextra\u003e","marker":{"color":"#636EFA"},"name":"FCFS","showlegend":false,"x":["FCFS"],"y":[96.15],"type":"bar","xaxis":"x4","yaxis":"y4"},{"hovertemplate":"\u003cb\u003eLate job percentage\u003c\u002fb\u003e\u003cbr\u003eMethod: SPT\u003cbr\u003eValue: %{y:.2f}\u003cextra\u003e\u003c\u002fextra\u003e","marker":{"color":"#EF553B"},"name":"SPT","showlegend":false,"x":["SPT"],"y":[99.29],"type":"bar","xaxis":"x4","yaxis":"y4"},{"hovertemplate":"\u003cb\u003eLate job percentage\u003c\u002fb\u003e\u003cbr\u003eMethod: EDD\u003cbr\u003eValue: %{y:.2f}\u003cextra\u003e\u003c\u002fextra\u003e","marker":{"color":"#00CC96"},"name":"EDD","showlegend":false,"x":["EDD"],"y":[96.51],"type":"bar","xaxis":"x4","yaxis":"y4"},{"hovertemplate":"\u003cb\u003eMakespan (days)\u003c\u002fb\u003e\u003cbr\u003eMethod: FCFS\u003cbr\u003eValue: %{y:.2f}\u003cextra\u003e\u003c\u002fextra\u003e","marker":{"color":"#636EFA"},"name":"FCFS","showlegend":false,"x":["FCFS"],"y":[1996.0],"type":"bar","xaxis":"x5","yaxis":"y5"},{"hovertemplate":"\u003cb\u003eMakespan (days)\u003c\u002fb\u003e\u003cbr\u003eMethod: SPT\u003cbr\u003eValue: %{y:.2f}\u003cextra\u003e\u003c\u002fextra\u003e","marker":{"color":"#EF553B"},"name":"SPT","showlegend":false,"x":["SPT"],"y":[2400.0],"type":"bar","xaxis":"x5","yaxis":"y5"},{"hovertemplate":"\u003cb\u003eMakespan (days)\u003c\u002fb\u003e\u003cbr\u003eMethod: EDD\u003cbr\u003eValue: %{y:.2f}\u003cextra\u003e\u003c\u002fextra\u003e","marker":{"color":"#00CC96"},"name":"EDD","showlegend":false,"x":["EDD"],"y":[1999.0],"type":"bar","xaxis":"x5","yaxis":"y5"}],                        {"template":{"data":{"barpolar":[{"marker":{"line":{"color":"white","width":0.5},"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"barpolar"}],"bar":[{"error_x":{"color":"#2a3f5f"},"error_y":{"color":"#2a3f5f"},"marker":{"line":{"color":"white","width":0.5},"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"bar"}],"carpet":[{"aaxis":{"endlinecolor":"#2a3f5f","gridcolor":"#C8D4E3","linecolor":"#C8D4E3","minorgridcolor":"#C8D4E3","startlinecolor":"#2a3f5f"},"baxis":{"endlinecolor":"#2a3f5f","gridcolor":"#C8D4E3","linecolor":"#C8D4E3","minorgridcolor":"#C8D4E3","startlinecolor":"#2a3f5f"},"type":"carpet"}],"choropleth":[{"colorbar":{"outlinewidth":0,"ticks":""},"type":"choropleth"}],"contourcarpet":[{"colorbar":{"outlinewidth":0,"ticks":""},"type":"contourcarpet"}],"contour":[{"colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"type":"contour"}],"heatmapgl":[{"colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"type":"heatmapgl"}],"heatmap":[{"colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"type":"heatmap"}],"histogram2dcontour":[{"colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"type":"histogram2dcontour"}],"histogram2d":[{"colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"type":"histogram2d"}],"histogram":[{"marker":{"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"histogram"}],"mesh3d":[{"colorbar":{"outlinewidth":0,"ticks":""},"type":"mesh3d"}],"parcoords":[{"line":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"parcoords"}],"pie":[{"automargin":true,"type":"pie"}],"scatter3d":[{"line":{"colorbar":{"outlinewidth":0,"ticks":""}},"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scatter3d"}],"scattercarpet":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scattercarpet"}],"scattergeo":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scattergeo"}],"scattergl":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scattergl"}],"scattermapbox":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scattermapbox"}],"scatterpolargl":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scatterpolargl"}],"scatterpolar":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scatterpolar"}],"scatter":[{"fillpattern":{"fillmode":"overlay","size":10,"solidity":0.2},"type":"scatter"}],"scatterternary":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scatterternary"}],"surface":[{"colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"type":"surface"}],"table":[{"cells":{"fill":{"color":"#EBF0F8"},"line":{"color":"white"}},"header":{"fill":{"color":"#C8D4E3"},"line":{"color":"white"}},"type":"table"}]},"layout":{"annotationdefaults":{"arrowcolor":"#2a3f5f","arrowhead":0,"arrowwidth":1},"autotypenumbers":"strict","coloraxis":{"colorbar":{"outlinewidth":0,"ticks":""}},"colorscale":{"diverging":[[0,"#8e0152"],[0.1,"#c51b7d"],[0.2,"#de77ae"],[0.3,"#f1b6da"],[0.4,"#fde0ef"],[0.5,"#f7f7f7"],[0.6,"#e6f5d0"],[0.7,"#b8e186"],[0.8,"#7fbc41"],[0.9,"#4d9221"],[1,"#276419"]],"sequential":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"sequentialminus":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]},"colorway":["#636efa","#EF553B","#00cc96","#ab63fa","#FFA15A","#19d3f3","#FF6692","#B6E880","#FF97FF","#FECB52"],"font":{"color":"#2a3f5f"},"geo":{"bgcolor":"white","lakecolor":"white","landcolor":"white","showlakes":true,"showland":true,"subunitcolor":"#C8D4E3"},"hoverlabel":{"align":"left"},"hovermode":"closest","mapbox":{"style":"light"},"margin":{"b":0,"l":0,"r":0,"t":30},"paper_bgcolor":"white","plot_bgcolor":"white","polar":{"angularaxis":{"gridcolor":"#EBF0F8","linecolor":"#EBF0F8","ticks":""},"bgcolor":"white","radialaxis":{"gridcolor":"#EBF0F8","linecolor":"#EBF0F8","ticks":""}},"scene":{"xaxis":{"backgroundcolor":"white","gridcolor":"#DFE8F3","gridwidth":2,"linecolor":"#EBF0F8","showbackground":true,"ticks":"","zerolinecolor":"#EBF0F8"},"yaxis":{"backgroundcolor":"white","gridcolor":"#DFE8F3","gridwidth":2,"linecolor":"#EBF0F8","showbackground":true,"ticks":"","zerolinecolor":"#EBF0F8"},"zaxis":{"backgroundcolor":"white","gridcolor":"#DFE8F3","gridwidth":2,"linecolor":"#EBF0F8","showbackground":true,"ticks":"","zerolinecolor":"#EBF0F8"}},"shapedefaults":{"line":{"color":"#2a3f5f"}},"ternary":{"aaxis":{"gridcolor":"#DFE8F3","linecolor":"#A2B1C6","ticks":""},"baxis":{"gridcolor":"#DFE8F3","linecolor":"#A2B1C6","ticks":""},"bgcolor":"white","caxis":{"gridcolor":"#DFE8F3","linecolor":"#A2B1C6","ticks":""}},"title":{"x":0.05},"xaxis":{"automargin":true,"gridcolor":"#EBF0F8","linecolor":"#EBF0F8","ticks":"","title":{"standoff":15},"zerolinecolor":"#EBF0F8","zerolinewidth":2},"yaxis":{"automargin":true,"gridcolor":"#EBF0F8","linecolor":"#EBF0F8","ticks":"","title":{"standoff":15},"zerolinecolor":"#EBF0F8","zerolinewidth":2}}},"xaxis":{"anchor":"y","domain":[0.0,0.13599999999999998],"tickfont":{"size":11},"showgrid":false},"yaxis":{"anchor":"x","domain":[0.0,1.0],"tickfont":{"size":11},"gridcolor":"rgba(0,0,0,0.05)"},"xaxis2":{"anchor":"y2","domain":[0.21599999999999997,0.352],"tickfont":{"size":11},"showgrid":false},"yaxis2":{"anchor":"x2","domain":[0.0,1.0],"tickfont":{"size":11},"gridcolor":"rgba(0,0,0,0.05)"},"xaxis3":{"anchor":"y3","domain":[0.43199999999999994,0.568],"tickfont":{"size":11},"showgrid":false},"yaxis3":{"anchor":"x3","domain":[0.0,1.0],"tickfont":{"size":11},"gridcolor":"rgba(0,0,0,0.05)"},"xaxis4":{"anchor":"y4","domain":[0.6479999999999999,0.7839999999999999],"tickfont":{"size":11},"showgrid":false},"yaxis4":{"anchor":"x4","domain":[0.0,1.0],"tickfont":{"size":11},"gridcolor":"rgba(0,0,0,0.05)"},"xaxis5":{"anchor":"y5","domain":[0.8639999999999999,0.9999999999999999],"tickfont":{"size":11},"showgrid":false},"yaxis5":{"anchor":"x5","domain":[0.0,1.0],"tickfont":{"size":11},"gridcolor":"rgba(0,0,0,0.05)"},"annotations":[{"font":{"size":14},"showarrow":false,"text":"\u003cb\u003eAverage waiting time\u003c\u002fb\u003e","x":0.5,"xref":"x domain","y":1.0,"yref":"y"},{"font":{"size":14},"showarrow":false,"text":"\u003cb\u003eAverage tardiness\u003c\u002fb\u003e","x":0.5,"xref":"x2 domain","y":1.0,"yref":"y2"},{"font":{"size":14},"showarrow":false,"text":"\u003cb\u003eMaximum tardiness\u003c\u002fb\u003e","x":0.5,"xref":"x3 domain","y":1.0,"yref":"y3"},{"font":{"size":14},"showarrow":false,"text":"\u003cb\u003eLate job percentage\u003c\u002fb\u003e","x":0.5,"xref":"x4 domain","y":1.0,"yref":"y4"},{"font":{"size":14},"showarrow":false,"text":"\u003cb\u003eMakespan (days)\u003c\u002fb\u003e","x":0.5,"xref":"x5 domain","y":1.0,"yref":"y5"}],"title":{"font":{"size":20},"text":"Scheduling Performance Comparison \u2014 Seller 1f50f920176fa81dab994f9023523100","x":0.5,"y":0.8,"xanchor":"center","yanchor":"top"},"margin":{"t":130,"b":80,"l":50,"r":50},"legend":{"orientation":"h","yanchor":"bottom","y":-0.25,"xanchor":"center","x":0.5},"height":500,"width":1500,"barmode":"group"},                        {"responsive": true}                    ).then(function(){
+                            
+var gd = document.getElementById('80b4a195-6898-4b0c-bc18-c11ec9deef7b');
+var x = new MutationObserver(function (mutations, observer) {{
+        var display = window.getComputedStyle(gd).display;
+        if (!display || display === 'none') {{
+            console.log([gd, 'removed!']);
+            Plotly.purge(gd);
+            observer.disconnect();
+        }}
+}});
+
+// Listen for the removal of the full notebook cells
+var notebookContainer = gd.closest('#notebook-container');
+if (notebookContainer) {{
+    x.observe(notebookContainer, {childList: true});
+}}
+
+// Listen for the clearing of the current output cell
+var outputEl = gd.closest('.output');
+if (outputEl) {{
+    x.observe(outputEl, {childList: true});
+}}
+
+                        })                };                });            </script>        </div>
+</div>
+</div>
+</section>
+</section>
+<section id="interactive-system" class="level1">
+<h1><span style="color:#990000;"><strong>5. Interactive System</strong></span></h1>
+<p>This project includes an interactive Streamlit application where users can input a seller ID and compare FCFS, SPT, and EDD results.</p>
+<p><a href="https://scheduling-or.streamlit.app">Seller Order Sequencing Dashboard</a></p>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp('/' + window.location.host + '/');
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>

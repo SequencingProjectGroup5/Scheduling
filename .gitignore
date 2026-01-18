@@ -1,12 +1,2 @@
-# Quarto generated files
-*_files/
-figure-html/
-libs/
-*.tmp.json
-
-# Python cache
-__pycache__/
-*.pyc
-
-# System files
-.DS_Store
+/.quarto/
+**/*.quarto_ipynb
