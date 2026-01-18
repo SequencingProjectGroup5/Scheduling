@@ -1,0 +1,704 @@
+---
+title: "Sequencing (Single Seller)"
+author: "Chhouk Phalthunin, Hok Lyhour, Hun Sopheak"
+format:
+  html:
+    theme: cosmo
+    mathjax: true
+    css: styles.css
+    toc: true
+    toc-depth: 2
+    code-fold: true
+    code-summary: "Show code"
+mermaid:
+  theme: default
+---
+
+# [1. **Introduction**]{style="color:#990000;"}
+
+This project studies the sequencing of customer orders for a single seller in an e-commerce platform. We compare three classical single-machine scheduling rules, **First Come First Served (FCFS), Shortest Processing Time (SPT), and Earliest Due Date (EDD), and evaluate their effects on waiting time and tardiness.**
+
+Using the [Brazilian E-Commerce (Olist) dataset](https://www.kaggle.com/datasets/olistbr/brazilian-ecommerce), we simulate order processing for each seller independently and develop an interactive system that allows sellers to input their seller ID and examine the resulting order sequences and performance metrics under each rule.
+
+::: callout-note
+Mandatory Tables
+
+-   olist_orders_dataset
+-   olist_order_items_dataset
+:::
+
+# [**2. Objective**]{style="color:#990000;"}
+
+The main objectives of this project are to:
+
+1.  Model the order processing of a single seller as a single-machine scheduling problem.
+
+2.  Apply and compare three classical sequencing rules: First Come First Served (FCFS), Shortest Processing Time (SPT), and Earliest Due Date (EDD).
+
+3.  Evaluate the impact of each sequencing rule on key performance measures, including waiting time and tardiness.
+
+4.  Use real transaction data from the Brazilian E-Commerce (Olist) dataset to simulate order processing under each rule.
+
+5.  Develop an interactive scheduling system that allows sellers to input their seller ID and analyze order sequences and performance metrics.
+
+# [**3. Road Map**]{style="color:#990000;"}
+
+```{mermaid}
+flowchart LR
+    A(**Data Preprocessing**<br/>Clean data<br/>Understand features) --> B(**Seller Separation**<br/>Group orders by seller<br/>Treat each seller independently)
+    B --> C(**Sequencing Models**<br/>FCFS<br/>SPT<br/>EDD) 
+    C --> D(**Interactive System**<br/>Input seller ID<br/>View sequences & metrics)
+```
+
+# [**4. Methodolgy**]{style="color:#990000;"}
+
+## [**4.1 Data Cleaning and Data Preprocessing**]{style="color:#990000;"}
+
+### 4.1.1. Import Important Libraries and Load Data
+
+```{python}
+#| code-fold: true
+import pandas as pd
+import numpy as np
+import plotly.graph_objects as go
+from plotly.subplots import make_subplots 
+```
+
+```{python}
+#| code-fold: true
+#| code-summary: load order items data
+#| code-line-numbers: true
+order_items = pd.read_csv("olist_order_items_dataset.csv")
+order_items.head()
+```
+
+```{python}
+#| code-fold: true
+#| code-line-numbers: true
+orders = pd.read_csv("olist_orders_dataset.csv")
+orders.head()
+```
+
+### 4.1.2. Features Understanding
+
+The following tables summarize the main features used from the olist_order_items_dataset and olist_orders_dataset, including their descriptions and data types. Only variables relevant to order sequencing and scheduling are considered in this project.
+
+```{python}
+#| code-fold: true
+#| code-summary: load orders data
+#| code-line-numbers: true
+
+order_items_features = pd.DataFrame({
+    "Feature": [
+        "order_id",
+        "order_item_id",
+        "product_id",
+        "seller_id",
+        "shipping_limit_date",
+        "price",
+        "freight_value"
+    ],
+    "Description": [
+        "Unique identifier of an order",
+        "Sequential number of the item within the order",
+        "Unique identifier of the product",
+        "Unique identifier of the seller",
+        "Deadline for the seller to ship the item",
+        "Price of the item",
+        "Shipping cost of the item"
+    ],
+    "Data Type": [
+        "Categorical (string)",
+        "Integer",
+        "Categorical (string)",
+        "Categorical (string)",
+        "Datetime",
+        "Numeric (float)",
+        "Numeric (float)"
+    ]
+})
+
+order_items_features
+
+```
+
+The following tables summarize the main features used from the olist_order_items_dataset and olist_orders_dataset, including their descriptions and data types. Only variables relevant to order sequencing and scheduling are considered in this project.
+
+```{python}
+#| code-fold: true
+#| code-line-numbers: true
+
+orders_features = pd.DataFrame({
+    "Feature": [
+        "order_id",
+        "customer_id",
+        "order_status",
+        "order_purchase_timestamp",
+        "order_approved_at",
+        "order_delivered_carrier_date",
+        "order_delivered_customer_date",
+        "order_estimated_delivery_date"
+    ],
+    "Description": [
+        "Unique identifier of an order",
+        "Unique identifier of the customer",
+        "Current status of the order",
+        "Time when the customer placed the order",
+        "Time when payment was approved",
+        "Time when order was handed to the carrier",
+        "Time when order was delivered to customer",
+        "Estimated delivery deadline"
+    ],
+    "Data Type": [
+        "Categorical (string)",
+        "Categorical (string)",
+        "Categorical",
+        "Datetime",
+        "Datetime",
+        "Datetime",
+        "Datetime",
+        "Datetime"
+    ]
+})
+
+orders_features
+```
+
+From the available features, only variables that directly contribute to modeling a single-machine scheduling problem are retained. Specifically, **seller_id** is used to define independent seller systems, **order_approved_at** represents the **arrival time of an order**, and **order_estimated_delivery_date** serves as the due date (deadline), and the number of items per order is used as a proxy for processing time. Other features are excluded as they do not influence sequencing decisions or scheduling priorities.
+
+## [**4.2. Seller Separation**]{style="color:#990000;"}
+
+The Olist dataset contains multiple sellers, each operating independently. To model order processing as a single-machine scheduling problem, sellers are first identified and separated so that each seller’s orders form an independent scheduling system.
+
+```{python}
+#| code-fold: true
+#| code-summary: load orders data
+#| code-line-numbers: true
+num_sellers = order_items["seller_id"].nunique()
+print(f"There are a total of {num_sellers} unique sellers.")
+```
+
+To analyze order flow at the seller level, orders are grouped by seller_id. For each seller, a scheduling table is constructed where each order is treated as one job. The order purchase time is defined as the arrival time, the estimated delivery date is used as the due date, and the number of items in an order is used as a proxy for processing time.
+
+The following function generates a scheduling table for any selected seller:
+
+```{python}
+#| code-fold: true
+#| code-summary: load orders data
+#| code-line-numbers: true
+
+def create_scheduling_table(seller_id, order_items, orders):
+    seller_items = order_items[order_items["seller_id"] == seller_id]
+
+    scheduling_table = (
+        seller_items
+        .merge(orders, on="order_id")
+        .groupby("order_id")
+        .agg(
+            arrival_time=("order_approved_at", "first"),
+            due_date=("order_estimated_delivery_date", "first"),
+            processing_time=("order_item_id", "count")
+        )
+        .reset_index()
+    )
+    return scheduling_table
+
+```
+
+To ensure meaningful sequencing analysis, sellers are ranked based on the total number of items ordered. This allows the selection of sellers with sufficient order volume.
+
+```{python}
+#| code-fold: true
+#| code-summary: rank sellers by number of items
+orders_per_seller_df = (
+order_items
+.groupby("seller_id")
+.size()
+.reset_index(name="number_of_items")
+.sort_values(by="number_of_items", ascending=False)
+)
+
+orders_per_seller_df.head()
+```
+
+## [**4.3. Data Cleaning**]{style="color:#990000;"}
+
+Before applying the sequencing models, the dataset is checked for missing values and data type consistency. In particular, timestamp variables must be converted to datetime format to ensure accurate computation of arrival times, due dates, waiting times, and tardiness.
+
+Great, this fits perfectly as Section 4.3 Data Cleaning. Below is a clean, concise, and well-structured 4.3 section, with clear explanations and correct Python code that you can paste directly into your Quarto document.
+
+[4.3. Data Cleaning]{style="color:#990000;"}
+
+Before applying the sequencing models, the dataset is checked for missing values and data type consistency. In particular, timestamp variables must be converted to datetime format to ensure accurate computation of arrival times, due dates, waiting times, and tardiness.
+
+4.3.1 Check for Missing Values
+
+The following code checks for missing values in both datasets.
+
+```{python}
+#| code-fold: true
+#| code-summary: Data Info
+#| code-line-numbers: true
+order_items.isnull().sum()
+```
+
+```{python}
+#| code-fold: true
+#| code-summary: Data Info
+#| code-line-numbers: true
+orders.isnull().sum()
+```
+
+```{python}
+#| code-fold: true
+#| code-summary: Removing Missing Values
+#| code-line-numbers: true
+#| 
+valid_orders = orders[orders["order_approved_at"].notna()]
+# Keep only valid orders in orders table
+orders_clean = valid_orders.copy()
+
+# Keep only order_items belonging to valid orders
+order_items_clean = order_items[
+    order_items["order_id"].isin(orders_clean["order_id"])
+]
+orders_clean = orders_clean.reset_index(drop=True)
+order_items_clean = order_items_clean.reset_index(drop=True)
+
+```
+
+```{python}
+
+#| code-fold: true
+#| code-summary: Data Info
+#| code-line-numbers: true
+orders = orders_clean
+order_items = order_items_clean
+```
+
+Moreover, to perform time-based calculations, all relevant date columns are converted to datetime format.
+
+```{python}
+#| code-fold: true
+#| code-summary: Convert to datetime
+#| code-line-numbers: true
+order_items["shipping_limit_date"] = pd.to_datetime(
+order_items["shipping_limit_date"]
+)
+```
+
+```{python}
+#| code-fold: true
+#| code-summary: convert orders date columns
+date_columns = [
+"order_purchase_timestamp",
+"order_approved_at",
+"order_delivered_carrier_date",
+"order_delivered_customer_date",
+"order_estimated_delivery_date"
+]
+
+for col in date_columns:
+    orders[col] = pd.to_datetime(orders[col])
+```
+
+After conversion, data types are verified to ensure correctness.
+
+```{python}
+#| code-fold: true
+#| code-summary: verify data types
+orders.dtypes
+```
+
+```{python}
+#| code-fold: true
+#| code-summary: verify data types
+order_items.dtypes
+```
+
+All timestamp variables are now stored as datetime objects, allowing accurate computation of arrival times, due dates, and scheduling performance metrics.
+
+## [**4.4. Sequencing Model Formulation**]{style="color:#990000;"}
+
+### [**4.4.1. Scheduling Variables and Performance Measures**]{style="color:#990000;"}
+
+In this project, order processing for each seller is modeled as a **single-machine scheduling problem**. Each order is treated as a job that must be processed by a single server (the seller), with **no preemption** and **only one job processed at a time**.
+
+### Scheduling Variables
+
+For each order (job) $i$, the following scheduling variables are defined:
+
+-   **Arrival time ($r_i$)**\
+    The time at which order $i$ becomes available for processing.\
+    In this study, $r_i$ is defined as the **order_approved_at**.
+
+-   **Processing time ($p_i$)**\
+    The time required to complete order $i$.\
+    Since actual handling times are unavailable, $p_i$ is approximated by the **number of items in the order**.
+
+-   **Due date ($d_i$)**\
+    The promised completion time for order $i$.\
+    This is defined as the **estimated delivery date** provided by the platform.
+
+-   **Sequence (π)**\
+    An ordered list of jobs that specifies the processing order, determined by a sequencing rule such as **FCFS**, **SPT**, or **EDD**.
+
+### Performance Measures
+
+To evaluate the effectiveness of each sequencing rule, the following standard performance measures are used:
+
+-   **Start time ($S_i$)**\
+    The time at which processing of order $i$ begins.
+
+-   **Completion time ($C_i$)**\
+    The time at which processing of order $i$ finishes.
+
+-   **Waiting time ($W_i$)**\
+    The amount of time order $i$ waits before processing:
+
+    $$
+    W_i = S_i - r_i
+    $$
+
+-   **Tardiness ($T_i$)**\
+    The amount by which order *i* is completed after its due date:
+
+    $$
+    T_i = \max(0, C_i - d_i)
+    $$
+
+These performance measures are commonly used in single-machine scheduling problems and allow for a quantitative comparison of different sequencing rules in terms of service efficiency and deadline compliance.
+
+### [**4.4.2 Schedule Simulation Procedure**]{style="color:#990000;"}
+
+Once a processing sequence is determined by a sequencing rule, the order processing schedule is simulated using standard single-machine scheduling logic. Given a fixed sequence of jobs, start times, completion times, waiting times, and tardiness values are computed sequentially.
+
+Let jobs be indexed according to the chosen sequence. For each order (job) $i$, processing begins either when the previous job is completed or when the order arrives, whichever occurs later. The start time is therefore defined as:
+
+$$
+S_i = \max(C_{i-1}, r_i)
+$$
+
+The completion time of job $i$ is then given by:
+
+$$
+C_i = S_i + p_i
+$$
+
+Using the computed start and completion times, performance measures are obtained as follows. The waiting time of job $i$ is defined as the difference between its start time and arrival time:
+
+$$
+W_i = S_i - r_i
+$$
+
+The tardiness of job $i$ measures the extent to which completion exceeds the due date and is defined as:
+
+$$
+T_i = \max(0, C_i - d_i)
+$$
+
+This simulation procedure is applied uniformly across all sequencing rules. By holding the simulation logic constant and varying only the job sequence, the impact of different sequencing rules on waiting time and tardiness can be fairly and consistently compared.
+
+```{python}
+#| code-fold: false
+#| code-summary: simulate schedule
+#| code-line-numbers: true
+def simulate_schedule_and_metrics(df):
+    df = df.copy()
+    df["start_time"] = pd.NaT
+    df["completion_time"] = pd.NaT
+    df["waiting_time"] = 0
+    df["tardiness"] = 0
+
+    current_time = df.iloc[0]["arrival_time"]
+
+    for i in range(len(df)):
+        arrival = df.iloc[i]["arrival_time"]
+        processing = df.iloc[i]["processing_time"]
+        due = df.iloc[i]["due_date"]
+
+        start_time = max(current_time, arrival)
+        completion_time = start_time + pd.to_timedelta(processing, unit="D")
+
+        df.loc[df.index[i], "start_time"] = start_time
+        df.loc[df.index[i], "completion_time"] = completion_time
+        df.loc[df.index[i], "waiting_time"] = (start_time - arrival).days
+        df.loc[df.index[i], "tardiness"] = max(0, (completion_time - due).days)
+
+        current_time = completion_time
+
+    metrics = {
+        "Average waiting time": df["waiting_time"].mean(),
+        "Average tardiness": df["tardiness"].mean(),
+        "Maximum tardiness": df["tardiness"].max(),
+        "Late job percentage": (df["tardiness"] > 0).mean() * 100,
+        "Makespan (days)": (df["completion_time"].max() - df["arrival_time"].min()).days
+    }
+
+    return df, metrics
+```
+
+## [**4.5 First Come First Served (FCFS)**]{style="color:#990000;"}
+
+::: {.callout-tip title="Algorithm" icon="false"}
+-   Step 1: Sort all orders by their arrival time from earliest to latest.
+-   Step 2: Select the first order in the list.
+-   Step 3: Start processing the selected order as soon as the machine is available.
+-   Step 4: Complete the order without interruption.
+-   Step 5: Move to the next order in the arrival_time order.
+-   Step 6: Repeat unitl all jobs are processed.
+:::
+
+### FCFS Python Implementation
+
+```{python}
+#| code-fold: true
+#| code-summary: FCFS
+#| code-line-numbers: true
+def FCFS(df):
+    return df.sort_values("arrival_time").reset_index(drop=True)
+```
+
+## [**4.6 Shortest Processing Time (SPT)**]{style="color:#990000;"}
+
+::: {.callout-tip title="Algorithm" icon="false"}
+-   Step 1: Sort all orders by their processing time from shortest to longest.
+-   Step 2: Select the order with the smallest processing time.
+-   Step 3: Start processing the selected order as soon as the machine is available.
+-   Step 4: Complete the order without interruption.
+-   Step 5: Move to the next order in the processing_time order.
+-   Step 6: Repeat until all jobs are processed.
+:::
+
+### SPT Python Implementation
+
+```{python}
+#| code-fold: true
+#| code-summary: SPT
+#| code-line-numbers: true
+def SPT(df):
+    return df.sort_values("processing_time").reset_index(drop=True)
+
+```
+
+## [**4.7 Earliest Due Date (EDD)**]{style="color:#990000;"}
+
+::: {.callout-tip title="Algorithm" icon="false"}
+-   Step 1: Sort all orders by their due dates from earliest to latest.
+-   Step 2: Select the order with the earliest due date.
+-   Step 3: Start processing the selected order as soon as the machine is available.
+-   Step 4: Complete the order without interruption.
+-   Step 5: Move to the next order in the due_date order.
+-   Step 6: Repeat until all jobs are processed.
+:::
+
+### EDD Python Implementation
+
+```{python}
+#| code-fold: true
+#| code-summary: EDD
+#| code-line-numbers: true
+def EDD(df):
+    return df.sort_values("due_date").reset_index(drop=True)
+```
+
+## [**4.8 Example Implementation and Results**]{style="color:#990000;"}
+
+To illustrate the proposed scheduling framework, three sellers are selected randomly from the dataset. For each seller, a scheduling table is constructed and the FCFS, SPT, and EDD sequencing rules are applied. The resulting schedules are simulated, and performance metrics are computed to compare the impact of each sequencing rule.
+
+```{python}
+#| code-fold: true
+#| code-summary: Randomize Three Seller's IDs 
+#| code-line-numbers: true
+import random
+
+random_sellers = random.sample(
+    list(order_items["seller_id"].unique()),
+    3
+)
+
+random_sellers
+```
+
+```{python}
+#| code-fold: true
+#| code-summary: perfoming scheduling
+#| code-line-numbers: true
+all_results = {}
+
+for seller_id in random_sellers:
+    schedule = create_scheduling_table(seller_id, order_items, orders)
+
+    _, fcfs_metrics = simulate_schedule_and_metrics(FCFS(schedule))
+    _, spt_metrics  = simulate_schedule_and_metrics(SPT(schedule))
+    _, edd_metrics  = simulate_schedule_and_metrics(EDD(schedule))
+
+    results_df = pd.DataFrame({
+        "Metric": list(fcfs_metrics.keys()),
+        "FCFS": list(fcfs_metrics.values()),
+        "SPT": list(spt_metrics.values()),
+        "EDD": list(edd_metrics.values())
+    })
+
+    results_df[["FCFS", "SPT", "EDD"]] = results_df[["FCFS", "SPT", "EDD"]].round(2)
+
+    all_results[seller_id] = results_df
+```
+
+```{python}
+#| code-fold: true 
+#| code-summary: results
+#| code-line-numbers: true
+
+for seller_id, result in all_results.items():
+    print(f"\nResults for Seller: {seller_id}")
+    display(result)
+```
+
+It is observed that for **some sellers**, all sequencing rules yield **zero waiting time and zero tardiness**. This occurs when sellers have **very few orders or when order arrivals are sufficiently spaced in time**, resulting in no congestion. In such cases, **all jobs begin processing immediately** upon arrival and are completed before their due dates, causing FCFS, SPT, and EDD to behave identically. Meaningful differences between sequencing rules emerge only for sellers with higher order volumes, where competition for processing capacity creates waiting and deadline violations.
+
+In order **to fix this problem**, we need to **select sellers who have atleast 10 orders**. This way, it supports our model more accuarately.
+
+```{python}
+"""
+#| code-fold: true 
+#| code-summary: Keep only sellers with at least 10 items
+#| code-line-numbers: true
+
+# Count number of items per seller
+seller_item_counts = (
+    order_items
+    .groupby("seller_id")
+    .size()
+    .reset_index(name="num_items")
+)
+
+# Keep only sellers with at least 10 items
+active_sellers = seller_item_counts[
+    seller_item_counts["num_items"] >= 10
+]["seller_id"]
+
+import random
+
+#random_sellers = random.sample(
+#    list(active_sellers),
+#    3
+#)
+"""
+random_sellers = ["6560211a19b47992c3666cc44a7e94c0","4a3ca9315b744ce9f8e9374361493884", "1f50f920176fa81dab994f9023523100"]
+```
+
+```{python}
+#| code-fold: true
+#| code-summary: perfoming scheduling
+#| code-line-numbers: true
+all_results = {}
+
+for seller_id in random_sellers:
+    schedule = create_scheduling_table(seller_id, order_items, orders)
+
+    _, fcfs_metrics = simulate_schedule_and_metrics(FCFS(schedule))
+    _, spt_metrics  = simulate_schedule_and_metrics(SPT(schedule))
+    _, edd_metrics  = simulate_schedule_and_metrics(EDD(schedule))
+
+    results_df = pd.DataFrame({
+        "Metric": list(fcfs_metrics.keys()),
+        "FCFS": list(fcfs_metrics.values()),
+        "SPT": list(spt_metrics.values()),
+        "EDD": list(edd_metrics.values())
+    })
+
+    results_df[["FCFS", "SPT", "EDD"]] = results_df[["FCFS", "SPT", "EDD"]].round(2)
+
+    all_results[seller_id] = results_df
+```
+
+```{python}
+#| code-fold: true
+#| code-summary: results
+#| code-line-numbers: true
+metrics_order = [
+    "Average waiting time",
+    "Average tardiness",
+    "Maximum tardiness",
+    "Late job percentage",
+    "Makespan (days)"
+]
+
+colors = {
+    "FCFS": "#636EFA",
+    "SPT": "#EF553B",
+    "EDD": "#00CC96"
+}
+
+for seller_id, df in all_results.items():
+    print(f"\nMetrics for Seller {seller_id}")
+    display(df)
+
+    fig = make_subplots(
+        rows=1,
+        cols=5,
+        horizontal_spacing=0.08
+    )
+
+    for col, metric in enumerate(metrics_order, start=1):
+        row = df[df["Metric"] == metric].iloc[0]
+
+        for method in ["FCFS", "SPT", "EDD"]:
+            fig.add_trace(
+                go.Bar(
+                    x=[method],
+                    y=[row[method]],
+                    name=method,
+                    marker_color=colors[method],
+                    showlegend=(col == 1),
+                    hovertemplate=(
+                        f"<b>{metric}</b><br>"
+                        f"Method: {method}<br>"
+                        "Value: %{y:.2f}<extra></extra>"
+                    )
+                ),
+                row=1,
+                col=col
+            )
+
+        fig.add_annotation(
+            text=f"<b>{metric}</b>",
+            xref="x domain",
+            yref="paper",
+            x=0.5,
+            y=1.00,
+            showarrow=False,
+            font=dict(size=14),
+            row=1,
+            col=col
+        )
+
+    fig.update_layout(
+        title=dict(
+            text=f"Scheduling Performance Comparison — Seller {seller_id}",
+            x=0.5,
+            y=0.8,
+            xanchor="center",
+            yanchor="top",
+            font=dict(size=20)
+        ),
+        height=500,
+        width=1500,
+        barmode="group",
+        template="plotly_white",
+        margin=dict(t=130, b=80, l=50, r=50),
+        legend=dict(
+            orientation="h",
+            yanchor="bottom",
+            y=-0.25,
+            xanchor="center",
+            x=0.5
+        )
+    )
+
+    fig.update_xaxes(showgrid=False, tickfont=dict(size=11))
+    fig.update_yaxes(gridcolor="rgba(0,0,0,0.05)", tickfont=dict(size=11))
+
+    fig.show()
+```
