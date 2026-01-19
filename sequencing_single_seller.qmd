@@ -54,7 +54,7 @@ flowchart LR
 
 ## [**4.1 Data Cleaning and Data Preprocessing**]{style="color:#990000;"}
 
-### 4.1.1. Import Important Libraries and Load Data
+### [**4.1.1. Import Important Libraries and Load Data**]{style="color:#990000;"}
 
 ```{python}
 #| code-fold: true
@@ -79,7 +79,7 @@ orders = pd.read_csv("olist_orders_dataset.csv")
 orders.head()
 ```
 
-### 4.1.2. Features Understanding
+### [**4.1.2. Features Understanding**]{style="color:#990000;"}
 
 The following tables summarize the main features used from the olist_order_items_dataset and olist_orders_dataset, including their descriptions and data types. Only variables relevant to order sequencing and scheduling are considered in this project.
 
