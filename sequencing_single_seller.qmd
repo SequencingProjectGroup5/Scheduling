@@ -554,7 +554,6 @@ It is observed that for **some sellers**, all sequencing rules yield **zero wait
 In order **to fix this problem**, we need to **select sellers who have atleast 10 orders**. This way, it supports our model more accuarately.
 
 ```{python}
-"""
 #| code-fold: true 
 #| code-summary: Keep only sellers with at least 10 items
 #| code-line-numbers: true
@@ -572,14 +571,7 @@ active_sellers = seller_item_counts[
     seller_item_counts["num_items"] >= 10
 ]["seller_id"]
 
-import random
-
-#random_sellers = random.sample(
-#    list(active_sellers),
-#    3
-#)
-"""
-random_sellers = ["6560211a19b47992c3666cc44a7e94c0","4a3ca9315b744ce9f8e9374361493884", "1f50f920176fa81dab994f9023523100"]
+top_three_sellers = ["6560211a19b47992c3666cc44a7e94c0","4a3ca9315b744ce9f8e9374361493884", "1f50f920176fa81dab994f9023523100"]
 ```
 
 ```{python}
@@ -588,7 +580,7 @@ random_sellers = ["6560211a19b47992c3666cc44a7e94c0","4a3ca9315b744ce9f8e9374361
 #| code-line-numbers: true
 all_results = {}
 
-for seller_id in random_sellers:
+for seller_id in top_three_sellers:
     schedule = create_scheduling_table(seller_id, order_items, orders)
 
     _, fcfs_metrics = simulate_schedule_and_metrics(FCFS(schedule))
