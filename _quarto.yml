@@ -1,0 +1,12 @@
+project:
+  type: website
+  output-dir: docs
+
+website:
+  title: "Scheduling Project"
+  navbar:
+    left:
+      - text: "Home"
+        href: index.qmd
+      - text: "Single Seller"
+        href: sequencing_single_seller.qmd
