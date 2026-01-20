@@ -1,10 +1,13 @@
 # %%
+import os
+import time
 import streamlit as st
 import pandas as pd
 import numpy as np
 import plotly.express as px
-import time
 
+# Detect Streamlit Cloud
+IS_CLOUD = os.environ.get("STREAMLIT_SERVER_HEADLESS") == "true"
 
 # %% ---------------- PAGE CONFIG ----------------
 st.set_page_config(
@@ -16,17 +19,8 @@ st.set_page_config(
 st.markdown(
     """
     <style>
-    /* Main app background */
-    .stApp {
-        background-color: #FFFFFF;
-    }
-
-    /* Sidebar */
-    section[data-testid="stSidebar"] {
-        background-color: #FFFFFF;
-    }
-
-    /* Metric cards */
+    .stApp { background-color: #FFFFFF; }
+    section[data-testid="stSidebar"] { background-color: #FFFFFF; }
     div[data-testid="metric-container"] {
         background-color: #FFFFFF;
         border: 1px solid #E0E0E0;
@@ -40,7 +34,6 @@ st.markdown(
 
 # %% ---------------- TITLE ----------------
 st.title("📦 Seller Order Sequencing Dashboard")
-
 
 # %% ---------------- DATA LOADING ----------------
 @st.cache_data
@@ -59,7 +52,6 @@ def load_data():
         parse_dates=["shipping_limit_date"]
     )
 
-    # Remove missing approved_at
     orders = orders[orders["order_approved_at"].notna()]
     order_items = order_items[order_items["order_id"].isin(orders["order_id"])]
 
@@ -67,7 +59,6 @@ def load_data():
 
 
 orders, order_items = load_data()
-
 
 # %% ---------------- TOP SELLERS ----------------
 @st.cache_data
@@ -81,8 +72,8 @@ def get_top_sellers(order_items, top_n=50):
         .reset_index(name="num_orders")
     )
 
-
 # %% ---------------- SCHEDULING TABLE ----------------
+@st.cache_data
 def create_scheduling_table(seller_id, order_items, orders):
     seller_items = order_items[order_items["seller_id"] == seller_id]
 
@@ -97,7 +88,6 @@ def create_scheduling_table(seller_id, order_items, orders):
         )
         .reset_index()
     )
-
 
 # %% ---------------- SIMULATION ----------------
 def simulate_schedule_and_metrics(df):
@@ -123,7 +113,7 @@ def simulate_schedule_and_metrics(df):
 
         current_time = finish
 
-    metrics = {
+    return {
         "Average waiting time": df["waiting_time"].mean(),
         "Average tardiness": df["tardiness"].mean(),
         "Maximum tardiness": df["tardiness"].max(),
@@ -133,32 +123,27 @@ def simulate_schedule_and_metrics(df):
         ).days
     }
 
-    return metrics
+@st.cache_data
+def simulate_cached(schedule, rule):
+    if rule == "FCFS":
+        schedule = schedule.sort_values("arrival_time")
+    elif rule == "SPT":
+        schedule = schedule.sort_values("processing_time")
+    elif rule == "EDD":
+        schedule = schedule.sort_values("due_date")
 
-
-# %% ---------------- SEQUENCING RULES ----------------
-def FCFS(df):
-    return df.sort_values("arrival_time")
-
-
-def SPT(df):
-    return df.sort_values("processing_time")
-
-
-def EDD(df):
-    return df.sort_values("due_date")
-
+    return simulate_schedule_and_metrics(schedule)
 
 # %% ---------------- TIME CONVERSION ----------------
-def convert_time(value_in_days, unit="days"):
-    if unit == "days":
-        return value_in_days
-    elif unit == "hours":
-        return value_in_days * 24
+def convert_time(value_in_days, unit):
+    return value_in_days if unit == "days" else value_in_days * 24
 
-
-# %% ---------------- ANIMATED METRIC ----------------
+# %% ---------------- METRIC (Cloud-safe) ----------------
 def animated_metric(label, value, unit="days", duration=0.6):
+    if IS_CLOUD:
+        st.metric(label, f"{convert_time(value, unit):.2f} {unit}")
+        return
+
     placeholder = st.empty()
     steps = 25
 
@@ -168,22 +153,16 @@ def animated_metric(label, value, unit="days", duration=0.6):
         placeholder.metric(label, f"{display_value:.2f} {unit}")
         time.sleep(duration / steps)
 
-
 # %% ---------------- CONTROLS ----------------
-time_unit = st.selectbox(
-    "Select time unit",
-    ["days", "hours"],
-    index=0
-)
-
+time_unit = st.selectbox("Select time unit", ["days", "hours"], index=0)
 
 # %% ---------------- SELLER SELECTION ----------------
 st.subheader("🔍 Seller Selection")
 
-top_sellers_df = get_top_sellers(order_items, top_n=50)
+top_sellers_df = get_top_sellers(order_items)
 
 selected_seller = st.selectbox(
-    "Select a seller from Top 50 (by number of orders)",
+    "Select a seller from Top 50",
     options=[""] + top_sellers_df["seller_id"].tolist(),
     format_func=lambda x: "— Select a seller —" if x == "" else x
 )
@@ -193,104 +172,81 @@ manual_seller = st.text_input(
     placeholder="Paste seller_id here (optional)"
 )
 
-seller_id = selected_seller if selected_seller else manual_seller
+seller_id = selected_seller or manual_seller
 
+if not seller_id:
+    st.info("Please select or enter a seller ID to view results.")
+    st.stop()
 
 # %% ---------------- RESULTS ----------------
-if seller_id:
-    schedule = create_scheduling_table(seller_id, order_items, orders)
+schedule = create_scheduling_table(seller_id, order_items, orders)
 
-    if len(schedule) < 10:
-        st.warning(
-            "This seller has fewer than 10 orders. Results may not be meaningful."
-        )
-    else:
-        fcfs = simulate_schedule_and_metrics(FCFS(schedule))
-        spt = simulate_schedule_and_metrics(SPT(schedule))
-        edd = simulate_schedule_and_metrics(EDD(schedule))
+if len(schedule) < 10:
+    st.warning("This seller has fewer than 10 orders. Results may not be meaningful.")
+    st.stop()
 
-        st.subheader("📊 Performance Overview")
+fcfs = simulate_cached(schedule, "FCFS")
+spt = simulate_cached(schedule, "SPT")
+edd = simulate_cached(schedule, "EDD")
 
-        col1, col2, col3 = st.columns(3)
+# %% ---------------- METRICS ----------------
+st.subheader("📊 Performance Overview")
 
-        with col1:
-            animated_metric(
-                "FCFS Avg Waiting",
-                fcfs["Average waiting time"],
-                unit=time_unit
-            )
-            animated_metric(
-                "FCFS Avg Tardiness",
-                fcfs["Average tardiness"],
-                unit=time_unit
-            )
+col1, col2, col3 = st.columns(3)
 
-        with col2:
-            animated_metric(
-                "SPT Avg Waiting",
-                spt["Average waiting time"],
-                unit=time_unit
-            )
-            animated_metric(
-                "SPT Avg Tardiness",
-                spt["Average tardiness"],
-                unit=time_unit
-            )
+with col1:
+    animated_metric("FCFS Avg Waiting", fcfs["Average waiting time"], time_unit)
+    animated_metric("FCFS Avg Tardiness", fcfs["Average tardiness"], time_unit)
 
-        with col3:
-            animated_metric(
-                "EDD Avg Waiting",
-                edd["Average waiting time"],
-                unit=time_unit
-            )
-            animated_metric(
-                "EDD Avg Tardiness",
-                edd["Average tardiness"],
-                unit=time_unit
-            )
+with col2:
+    animated_metric("SPT Avg Waiting", spt["Average waiting time"], time_unit)
+    animated_metric("SPT Avg Tardiness", spt["Average tardiness"], time_unit)
 
-        st.subheader("📋 Metric Comparison")
+with col3:
+    animated_metric("EDD Avg Waiting", edd["Average waiting time"], time_unit)
+    animated_metric("EDD Avg Tardiness", edd["Average tardiness"], time_unit)
 
-        results_df = pd.DataFrame({
-            "Metric": fcfs.keys(),
-            "FCFS": fcfs.values(),
-            "SPT": spt.values(),
-            "EDD": edd.values()
-        }).round(2)
+# %% ---------------- TABLE ----------------
+st.subheader("📋 Metric Comparison")
 
-        st.dataframe(results_df, use_container_width=True)
+results_df = pd.DataFrame({
+    "Metric": fcfs.keys(),
+    "FCFS": fcfs.values(),
+    "SPT": spt.values(),
+    "EDD": edd.values()
+}).round(2)
 
-        plot_df = results_df[
-            results_df["Metric"].isin([
-                "Average waiting time",
-                "Average tardiness",
-                "Maximum tardiness"
-            ])
-        ].melt(
-            id_vars="Metric",
-            var_name="Policy",
-            value_name="Value"
-        )
+st.dataframe(results_df, use_container_width=True)
 
-        if time_unit == "hours":
-            plot_df["Value"] *= 24
+# %% ---------------- PLOT ----------------
+plot_df = results_df[
+    results_df["Metric"].isin([
+        "Average waiting time",
+        "Average tardiness",
+        "Maximum tardiness"
+    ])
+].melt(id_vars="Metric", var_name="Policy", value_name="Value")
 
-        fig = px.bar(
-            plot_df,
-            x="Metric",
-            y="Value",
-            color="Policy",
-            barmode="group",
-            title=f"Scheduling Policy Comparison ({time_unit})",
-            text_auto=".2f",
-            template="plotly_white"
-        )
+if time_unit == "hours":
+    plot_df["Value"] *= 24
 
-        fig.update_layout(
-            transition_duration=1200,
-            transition_easing="cubic-in-out",
-            xaxis_title="Performance Metric",
-            yaxis_title=f"Time ({time_unit})"
-        )
+fig = px.bar(
+    plot_df,
+    x="Metric",
+    y="Value",
+    color="Policy",
+    barmode="group",
+    title=f"Scheduling Policy Comparison ({time_unit})",
+    text_auto=".2f",
+    template="plotly_white"
+)
 
-        st.plotly_chart(fig, use_container_width=True)
+if IS_CLOUD:
+    fig.update_layout(transition_duration=0)
+else:
+    fig.update_layout(
+        transition_duration=1200,
+        transition_easing="cubic-in-out"
+    )
+
+st.plotly_chart(fig, use_container_width=True)
