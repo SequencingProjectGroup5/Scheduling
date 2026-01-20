@@ -1,252 +1,152 @@
-# %%
 import os
-import time
 import streamlit as st
 import pandas as pd
 import numpy as np
 import plotly.express as px
 
-# Detect Streamlit Cloud
-IS_CLOUD = os.environ.get("STREAMLIT_SERVER_HEADLESS") == "true"
-
 # %% ---------------- PAGE CONFIG ----------------
-st.set_page_config(
-    page_title="Seller Scheduling Dashboard",
-    layout="wide"
-)
+st.set_page_config(page_title="Seller Scheduling Dashboard", layout="wide")
 
-# %% ---------------- WHITE BACKGROUND STYLE ----------------
-st.markdown(
-    """
+# Optimized CSS
+st.markdown("""
     <style>
-    .stApp { background-color: #FFFFFF; }
-    section[data-testid="stSidebar"] { background-color: #FFFFFF; }
-    div[data-testid="metric-container"] {
-        background-color: #FFFFFF;
-        border: 1px solid #E0E0E0;
-        padding: 10px;
-        border-radius: 8px;
-    }
+    .stMetric { border: 1px solid #E0E0E0; padding: 10px; border_radius: 8px; }
     </style>
-    """,
-    unsafe_allow_html=True
-)
-
-# %% ---------------- TITLE ----------------
-st.title("📦 Seller Order Sequencing Dashboard")
+    """, unsafe_allow_html=True)
 
 # %% ---------------- DATA LOADING ----------------
 @st.cache_data
 def load_data():
-    orders = pd.read_csv(
-        "olist_orders_dataset.csv",
-        parse_dates=[
-            "order_purchase_timestamp",
-            "order_approved_at",
-            "order_estimated_delivery_date"
-        ]
-    )
-
-    order_items = pd.read_csv(
-        "olist_order_items_dataset.csv",
-        parse_dates=["shipping_limit_date"]
-    )
-
-    orders = orders[orders["order_approved_at"].notna()]
-    order_items = order_items[order_items["order_id"].isin(orders["order_id"])]
-
+    # Only load necessary columns to save memory and speed up processing
+    order_cols = ["order_id", "order_approved_at", "order_estimated_delivery_date"]
+    item_cols = ["order_id", "seller_id", "order_item_id"]
+    
+    orders = pd.read_csv("olist_orders_dataset.csv", usecols=order_cols,
+                         parse_dates=["order_approved_at", "order_estimated_delivery_date"])
+    
+    order_items = pd.read_csv("olist_order_items_dataset.csv", usecols=item_cols)
+    
+    # Pre-filter: drop orders without approval times immediately
+    orders = orders.dropna(subset=["order_approved_at"])
     return orders, order_items
-
 
 orders, order_items = load_data()
 
-# %% ---------------- TOP SELLERS ----------------
+# %% ---------------- SCHEDULING LOGIC ----------------
 @st.cache_data
 def get_top_sellers(order_items, top_n=50):
-    return (
-        order_items
-        .groupby("seller_id")
-        .size()
-        .sort_values(ascending=False)
-        .head(top_n)
-        .reset_index(name="num_orders")
-    )
+    return order_items["seller_id"].value_counts().head(top_n).reset_index(name="num_orders")
 
-# %% ---------------- SCHEDULING TABLE ----------------
 @st.cache_data
-def create_scheduling_table(seller_id, order_items, orders):
-    seller_items = order_items[order_items["seller_id"] == seller_id]
+def create_scheduling_table(seller_id, _order_items, _orders):
+    # Filtering first, then merging is much faster
+    seller_items = _order_items[_order_items["seller_id"] == seller_id]
+    
+    # Vectorized aggregation
+    df = (seller_items.merge(_orders, on="order_id")
+          .groupby("order_id")
+          .agg(
+              arrival_time=("order_approved_at", "first"),
+              due_date=("order_estimated_delivery_date", "first"),
+              processing_time=("order_item_id", "count")
+          )
+          .sort_values("arrival_time") # Pre-sort for the simulation
+          .reset_index())
+    return df
 
-    return (
-        seller_items
-        .merge(orders, on="order_id")
-        .groupby("order_id")
-        .agg(
-            arrival_time=("order_approved_at", "first"),
-            due_date=("order_estimated_delivery_date", "first"),
-            processing_time=("order_item_id", "count")
-        )
-        .reset_index()
-    )
-
-# %% ---------------- SIMULATION ----------------
 def simulate_schedule_and_metrics(df):
-    df = df.copy()
-    df["start_time"] = pd.NaT
-    df["completion_time"] = pd.NaT
-    df["waiting_time"] = 0
-    df["tardiness"] = 0
+    """Vectorized simulation for speed."""
+    # Convert to numpy for maximum speed
+    arrivals = df["arrival_time"].values
+    process_durations = pd.to_timedelta(df["processing_time"].values, unit="D").values
+    dues = df["due_date"].values
 
-    current_time = df.iloc[0]["arrival_time"]
+    n = len(df)
+    starts = np.empty(n, dtype='datetime64[ns]')
+    finishes = np.empty(n, dtype='datetime64[ns]')
 
-    for i in range(len(df)):
-        arrival = df.iloc[i]["arrival_time"]
-        processing = df.iloc[i]["processing_time"]
-        due = df.iloc[i]["due_date"]
+    # The first job
+    starts[0] = arrivals[0]
+    finishes[0] = starts[0] + process_durations[0]
 
-        start = max(current_time, arrival)
-        finish = start + pd.to_timedelta(processing, unit="D")
+    # This loop is now very tight and only handles the 'finish-to-start' dependency
+    current_finish = finishes[0]
+    for i in range(1, n):
+        starts[i] = max(current_finish, arrivals[i])
+        finishes[i] = starts[i] + process_durations[i]
+        current_finish = finishes[i]
 
-        df.loc[df.index[i], ["start_time", "completion_time"]] = [start, finish]
-        df.loc[df.index[i], "waiting_time"] = (start - arrival).days
-        df.loc[df.index[i], "tardiness"] = max(0, (finish - due).days)
-
-        current_time = finish
+    # Vectorized metrics
+    waiting_times = (starts - arrivals).astype('timedelta64[D]').astype(int)
+    tardiness = np.maximum(0, (finishes - dues).astype('timedelta64[D]').astype(int))
 
     return {
-        "Average waiting time": df["waiting_time"].mean(),
-        "Average tardiness": df["tardiness"].mean(),
-        "Maximum tardiness": df["tardiness"].max(),
-        "Late job %": (df["tardiness"] > 0).mean() * 100,
-        "Makespan (days)": (
-            df["completion_time"].max() - df["arrival_time"].min()
-        ).days
+        "Average waiting time": np.mean(waiting_times),
+        "Average tardiness": np.mean(tardiness),
+        "Maximum tardiness": np.max(tardiness),
+        "Late job %": (tardiness > 0).mean() * 100,
+        "Makespan (days)": (finishes.max() - arrivals.min()) / np.timedelta64(1, 'D')
     }
 
 @st.cache_data
 def simulate_cached(schedule, rule):
-    if rule == "FCFS":
-        schedule = schedule.sort_values("arrival_time")
-    elif rule == "SPT":
+    # Optimization: Only sort, the simulation itself is very fast now
+    if rule == "SPT":
         schedule = schedule.sort_values("processing_time")
     elif rule == "EDD":
         schedule = schedule.sort_values("due_date")
-
+    # FCFS is already the default sort from create_scheduling_table
+    
     return simulate_schedule_and_metrics(schedule)
 
-# %% ---------------- TIME CONVERSION ----------------
-def convert_time(value_in_days, unit):
-    return value_in_days if unit == "days" else value_in_days * 24
+# %% ---------------- UI COMPONENTS ----------------
+st.title("📦 Seller Order Sequencing Dashboard")
 
-# %% ---------------- METRIC (Cloud-safe) ----------------
-def animated_metric(label, value, unit="days", duration=0.6):
-    if IS_CLOUD:
-        st.metric(label, f"{convert_time(value, unit):.2f} {unit}")
-        return
+# Time conversion factor
+time_unit = st.selectbox("Select time unit", ["days", "hours"])
+multiplier = 24 if time_unit == "hours" else 1
 
-    placeholder = st.empty()
-    steps = 25
-
-    for i in range(steps + 1):
-        current = value * i / steps
-        display_value = convert_time(current, unit)
-        placeholder.metric(label, f"{display_value:.2f} {unit}")
-        time.sleep(duration / steps)
-
-# %% ---------------- CONTROLS ----------------
-time_unit = st.selectbox("Select time unit", ["days", "hours"], index=0)
-
-# %% ---------------- SELLER SELECTION ----------------
-st.subheader("🔍 Seller Selection")
-
+# Seller Selection
 top_sellers_df = get_top_sellers(order_items)
-
-selected_seller = st.selectbox(
-    "Select a seller from Top 50",
-    options=[""] + top_sellers_df["seller_id"].tolist(),
-    format_func=lambda x: "— Select a seller —" if x == "" else x
-)
-
-manual_seller = st.text_input(
-    "Or manually enter a Seller ID",
-    placeholder="Paste seller_id here (optional)"
-)
-
-seller_id = selected_seller or manual_seller
+seller_id = st.selectbox("Select a seller", options=[""] + top_sellers_df["seller_id"].tolist())
 
 if not seller_id:
-    st.info("Please select or enter a seller ID to view results.")
+    st.info("Select a seller to begin.")
     st.stop()
 
-# %% ---------------- RESULTS ----------------
+# %% ---------------- EXECUTION ----------------
 schedule = create_scheduling_table(seller_id, order_items, orders)
 
-if len(schedule) < 10:
-    st.warning("This seller has fewer than 10 orders. Results may not be meaningful.")
+if len(schedule) < 5:
+    st.warning("Too few orders for a meaningful simulation.")
     st.stop()
 
+# Run simulations
 fcfs = simulate_cached(schedule, "FCFS")
 spt = simulate_cached(schedule, "SPT")
 edd = simulate_cached(schedule, "EDD")
 
-# %% ---------------- METRICS ----------------
-st.subheader("📊 Performance Overview")
+# Display Metrics
+st.subheader(f"📊 Performance Overview ({time_unit})")
+cols = st.columns(3)
+rules = [("FCFS", fcfs), ("SPT", spt), ("EDD", edd)]
 
-col1, col2, col3 = st.columns(3)
+for i, (name, metrics) in enumerate(rules):
+    with cols[i]:
+        st.metric(f"{name} Avg Waiting", f"{metrics['Average waiting time'] * multiplier:.2f}")
+        st.metric(f"{name} Avg Tardiness", f"{metrics['Average tardiness'] * multiplier:.2f}")
 
-with col1:
-    animated_metric("FCFS Avg Waiting", fcfs["Average waiting time"], time_unit)
-    animated_metric("FCFS Avg Tardiness", fcfs["Average tardiness"], time_unit)
-
-with col2:
-    animated_metric("SPT Avg Waiting", spt["Average waiting time"], time_unit)
-    animated_metric("SPT Avg Tardiness", spt["Average tardiness"], time_unit)
-
-with col3:
-    animated_metric("EDD Avg Waiting", edd["Average waiting time"], time_unit)
-    animated_metric("EDD Avg Tardiness", edd["Average tardiness"], time_unit)
-
-# %% ---------------- TABLE ----------------
-st.subheader("📋 Metric Comparison")
-
+# %% ---------------- VISUALIZATION ----------------
 results_df = pd.DataFrame({
-    "Metric": fcfs.keys(),
-    "FCFS": fcfs.values(),
-    "SPT": spt.values(),
-    "EDD": edd.values()
-}).round(2)
+    "Metric": ["Avg Waiting", "Avg Tardiness", "Max Tardiness"],
+    "FCFS": [fcfs["Average waiting time"], fcfs["Average tardiness"], fcfs["Maximum tardiness"]],
+    "SPT": [spt["Average waiting time"], spt["Average tardiness"], spt["Maximum tardiness"]],
+    "EDD": [edd["Average waiting time"], edd["Average tardiness"], edd["Maximum tardiness"]]
+})
 
-st.dataframe(results_df, use_container_width=True)
+plot_df = results_df.melt(id_vars="Metric", var_name="Policy", value_name="Value")
+plot_df["Value"] *= multiplier
 
-# %% ---------------- PLOT ----------------
-plot_df = results_df[
-    results_df["Metric"].isin([
-        "Average waiting time",
-        "Average tardiness",
-        "Maximum tardiness"
-    ])
-].melt(id_vars="Metric", var_name="Policy", value_name="Value")
-
-if time_unit == "hours":
-    plot_df["Value"] *= 24
-
-fig = px.bar(
-    plot_df,
-    x="Metric",
-    y="Value",
-    color="Policy",
-    barmode="group",
-    title=f"Scheduling Policy Comparison ({time_unit})",
-    text_auto=".2f",
-    template="plotly_white"
-)
-
-if IS_CLOUD:
-    fig.update_layout(transition_duration=0)
-else:
-    fig.update_layout(
-        transition_duration=1200,
-        transition_easing="cubic-in-out"
-    )
-
+fig = px.bar(plot_df, x="Metric", y="Value", color="Policy", barmode="group",
+             text_auto=".2f", template="plotly_white", height=400)
 st.plotly_chart(fig, use_container_width=True)
